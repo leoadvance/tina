@@ -1,0 +1,95 @@
+--- a/initd/init.c
++++ b/initd/init.c
+@@ -32,7 +32,7 @@
+ #include "../watchdog.h"
+
+ unsigned int debug = 0;
+-
++pid_t gKmodLoaderPid = 0;
+ static void
+ signal_shutdown(int signal, siginfo_t *siginfo, void *data)
+ {
+@@ -88,7 +88,7 @@ main(int argc, char **argv)
+
+	pid = fork();
+	if (!pid) {
+-		char *kmod[] = { "/sbin/kmodloader", "/etc/modules-boot.d/", NULL };
++		char *kmod[] = { "/sbin/kmodloader", "/etc/modules.d/", NULL };
+
+		if (debug < 3) {
+			int fd = open("/dev/null", O_RDWR);
+@@ -108,7 +108,7 @@ main(int argc, char **argv)
+	if (pid <= 0)
+		ERROR("Failed to start kmodloader instance\n");
+	else
+-		waitpid(pid, NULL, 0);
++		gKmodLoaderPid = pid;
+	uloop_init();
+	preinit();
+	uloop_run();
+--- a/initd/preinit.c
++++ b/initd/preinit.c
+@@ -15,7 +15,7 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <sys/mount.h>
+-
++#include <sys/wait.h>
+ #include <libubox/uloop.h>
+ #include <libubox/utils.h>
+ #include <libubus.h>
+@@ -29,6 +29,7 @@
+
+ static struct uloop_process preinit_proc;
+ static struct uloop_process plugd_proc;
++extern pid_t gKmodLoaderPid;
+
+ static void
+ check_dbglvl(void)
+@@ -60,7 +61,16 @@ spawn_procd(struct uloop_process *proc,
+	if (!stat("/tmp/sysupgrade", &s))
+		while (true)
+			sleep(1);
+-
++	if(gKmodLoaderPid != 0) {
++		int i, status, ret;
++		for(i = 0; i < 120; i++) {
++			ret = waitpid(gKmodLoaderPid, &status, WNOHANG);
++			if(ret != 0)
++				break;
++			usleep(10000);
++			//watchdog_ping();
++		}
++	}
+	unsetenv("INITRAMFS");
+	unsetenv("PREINIT");
+	DEBUG(2, "Exec to real procd now\n");
+--- a/plug/hotplug.c
++++ b/plug/hotplug.c
+@@ -33,7 +33,7 @@
+
+ #include "hotplug.h"
+
+-#define HOTPLUG_WAIT	500
++#define HOTPLUG_WAIT	50
+
+ struct cmd_queue {
+	struct list_head list;
+--- a/ubus.c
++++ b/ubus.c
+@@ -46,7 +46,7 @@ ubus_connect_cb(struct uloop_timeout *ti
+
+	if (!ctx) {
+		DEBUG(4, "Connection to ubus failed\n");
+-		uloop_timeout_set(&ubus_timer, 1000);
++		uloop_timeout_set(&ubus_timer, 50);
+		return;
+	}
+
+@@ -63,5 +63,5 @@ void
+ procd_connect_ubus(void)
+ {
+	ubus_timer.cb = ubus_connect_cb;
+-	uloop_timeout_set(&ubus_timer, 1000);
++	uloop_timeout_set(&ubus_timer, 50);
+ }

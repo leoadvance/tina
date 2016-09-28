@@ -35,10 +35,10 @@ boot() {
 	grep -q debugfs /proc/filesystems && /bin/mount -o noatime -t debugfs debugfs /sys/kernel/debug
 	[ "$FAILSAFE" = "true" ] && touch /tmp/.failsafe
 
-	/sbin/kmodloader
+	#/sbin/kmodloader
 
 	# allow wifi modules time to settle
-	sleep 1
+	#sleep 1
 
 	/sbin/wifi detect > /tmp/wireless.tmp
 	[ -s /tmp/wireless.tmp ] && {
