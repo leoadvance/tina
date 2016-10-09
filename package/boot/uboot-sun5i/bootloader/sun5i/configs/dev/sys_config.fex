@@ -281,7 +281,7 @@ ctp_revert_y_flag        = 1
 ctp_exchange_x_y_flag    = 0
 
 ctp_int_port             = port:PG10<6><default><default><default>
-ctp_wakeup               = port:PG11<1><default><default><1>
+;ctp_wakeup               = port:PG11<1><default><default><1>
 ;ctp_io_port              = port:PH21<0><default>
 
 ;----------------------------------------------------------------------------------
@@ -393,8 +393,8 @@ lcd_gamma_tbl_0          = 0x00000000
 lcd_gamma_tbl_1          = 0x00010101
 lcd_gamma_tbl_255        = 0x00ffffff
 
-;lcd_bl_en_used           = 1
-;lcd_bl_en                = port:power1<1><0><default><1>
+lcd_bl_en_used           = 1
+lcd_bl_en                = port:PG11<1><default><default><1>
 ;lcd_power_used           = 1
 ;lcd_power                = port:power0<1><0><default><1>
 
