@@ -11,7 +11,7 @@ machine = "r8-dev"
 [platform]
 eraseflag   = 0
 next_work = 2
-debug_mode = 0x17
+debug_mode = 0
 
 ;----------------------------------------------------------------------------------
 ; system configuration
