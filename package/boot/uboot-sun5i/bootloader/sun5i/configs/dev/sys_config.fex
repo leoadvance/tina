@@ -11,7 +11,7 @@ machine = "r8-dev"
 [platform]
 eraseflag   = 0
 next_work = 2
-debug_mode = 0
+debug_mode = 0x17
 
 ;----------------------------------------------------------------------------------
 ; system configuration
@@ -590,7 +590,7 @@ sdc_use_wp               = 0
 sdc_wp                   =
 
 [mmc1_para]
-sdc_used                 = 0
+sdc_used                 = 1
 sdc_detmode              =
 bus_width                =
 sdc_cmd                  =
