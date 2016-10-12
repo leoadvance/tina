@@ -19,6 +19,16 @@ wifi_connect_chinese_ap_test: wifi_connect_chinese_ap.c
 	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES)  $(LDFLAGS) -L$(CONFIG_PREFIX)/usr/lib -lwifimg
 	@cp -f wifi_connect_chinese_ap_test $(CONFIG_PREFIX)/usr/bin
 
+#wifi_list_networks_test
+wifi_list_networks_test: wifi_list_networks.c
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES)  $(LDFLAGS) -L$(CONFIG_PREFIX)/usr/lib -lwifimg
+	@cp -f wifi_list_networks_test $(CONFIG_PREFIX)/usr/bin
+
+#wifi_connect_ap_with_netid_test
+wifi_connect_ap_with_netid_test: wifi_connect_ap_with_netid.c
+	$(CC) -o $@ $^ $(CFLAGS) $(INCLUDES)  $(LDFLAGS) -L$(CONFIG_PREFIX)/usr/lib -lwifimg
+	@cp -f wifi_connect_ap_with_netid_test $(CONFIG_PREFIX)/usr/bin
+
 #wifi_connect_ap_test
 $(CPP_OBJS): %.o: %.cpp
 	$(CXX) $(CFLAGS) $(INCLUDES) -c -o $@ $<
@@ -27,7 +37,6 @@ $(target): $(LIB_OBJS)
 	@cp -f $(target) $(CONFIG_PREFIX)/usr/bin
 
 ####################################################################
-all: install $(target) wifi_on_off_test wifi_connect_chinese_ap_test
+all: install $(target) wifi_on_off_test wifi_connect_chinese_ap_test wifi_list_networks_test wifi_connect_ap_with_netid_test
 clean:
-	rm -rf $(target) wifi_on_off_test wifi_connect_chinese_ap_test $(LIB_OBJS)
-
+	rm -rf $(target) wifi_on_off_test wifi_connect_chinese_ap_test wifi_list_networks_test wifi_connect_ap_with_netid_test $(LIB_OBJS)
