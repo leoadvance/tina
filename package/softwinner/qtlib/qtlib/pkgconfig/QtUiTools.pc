@@ -1,4 +1,4 @@
-prefix=/home/leo/MyQt/Qt4.8.6_R8
+prefix=/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include/QtUiTools
@@ -6,9 +6,9 @@ qt_config=lex yacc warn_on uic resources qt warn_on release incremental link_prl
 
 Name: Qtuitools
 Description: Qtuitools Library
-Version: 4.8.6
+Version: 4.8.7
 Libs: -L${libdir} -lQtUiTools 
-Libs.private: -L/home/leo/MyQt/qt-opensource-src-4.8.6-ARM/lib  -lQtXml -L/home/leo/MyQt/qt-opensource-src-4.8.6-ARM/lib -lQtGui -lQtNetwork -lQtCore -lpthread   
-Cflags: -I/home/leo/MyQt/Qt4.8.6_R8/include -I${includedir}
+Libs.private: -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/lib  -lQtXml -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/lib -lQtGui -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread   
+Cflags: -I/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/include -I${includedir}
 Requires: QtXml
 
