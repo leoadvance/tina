@@ -882,7 +882,7 @@ ir0_rx                   = port:PB04<2><default><default><default>
 
 
 [rtc_para]
-rtc_used                 = 0
+rtc_used                 = 1
 rtc_name                 = "pcf8563"
 rtc_twi_id               = 1
 rtc_twi_addr	         = 0x51
@@ -984,7 +984,7 @@ pmu_pwron_vol            = 2900
 pmu_pekoff_time          = 8000
 pmu_pekoff_en            = 1
 pmu_peklong_time         = 1500
-pmu_pekon_time           = 2000
+pmu_pekon_time           = 1000
 pmu_pwrok_time           = 64
 pmu_pwrnoe_time          = 2000
 pmu_intotp_en            = 1
