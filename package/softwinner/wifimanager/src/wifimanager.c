@@ -980,6 +980,81 @@ end:
     return ret;
 }
 
+
+static int aw_wifi_connect_ap_with_netid(const char *net_id, int event_label)
+{
+
+int i=0, ret = -1, len = 0;
+char cmd[CMD_LEN+1] = {0};
+char reply[REPLY_BUF_SIZE] = {0};
+tWIFI_MACHINE_STATE wifi_machine_state;
+const char *p_ssid = NULL;
+
+if(gwifi_state == WIFIMG_WIFI_DISABLED){
+	return -1;
+}
+
+wifi_machine_state = get_wifi_machine_state();
+if(wifi_machine_state != CONNECTED_STATE && wifi_machine_state != DISCONNECTED_STATE){
+	ret = -1;
+	event_code = WIFIMG_DEV_BUSING_EVENT;
+	goto end;
+}
+
+/*disconnect*/
+wifi_machine_state = get_wifi_machine_state();
+if(wifi_machine_state == CONNECTED_STATE){
+	aw_wifi_disconnect_ap(0x7fffffff);
+}
+
+/* connecting */
+set_wifi_machine_state(CONNECTING_STATE);
+
+/* set connecting event label */
+connecting_ap_event_label = event_label;
+
+/* remove disconnecting flag */
+disconnecting = 0;
+
+	/* selected_network */
+		sprintf(cmd, "SELECT_NETWORK %s", net_id);
+		ret = wifi_command(cmd, reply, sizeof(reply));
+		if(ret){
+			printf("do selected network error!\n");
+			ret = -1;
+			event_code = WIFIMG_CMD_OR_PARAMS_ERROR;
+			goto end;
+		}
+		
+     /*reconnect*/
+	strncpy(cmd, "RECONNECT", CMD_LEN);
+       cmd[CMD_LEN] = '\0';
+	ret = wifi_command(cmd, reply, sizeof(reply));
+	if(ret){
+		printf("do reconnect error!\n");
+		ret = -1;
+		event_code = WIFIMG_CMD_OR_PARAMS_ERROR;
+	}
+
+    /* connected */
+    set_wifi_machine_state(CONNECTED_STATE);
+
+    	printf("do wifi connect ap with netid finished!\n");
+
+end:
+	if(ret != 0){
+	call_event_callback_function(event_code, NULL, event_label);
+	}
+	
+	
+	return ret;
+
+   
+}
+
+
+
+
 /* cancel saved AP in wpa_supplicant.conf */
 static int aw_wifi_remove_network(char *ssid, tKEY_MGMT key_mgmt)
 {
@@ -1174,6 +1249,62 @@ end:
     return ret;
 }
 
+static int aw_wifi_list_networks(char *reply, size_t reply_len, int event_label)
+{
+	 int i=0, ret = -1;
+	char cmd[CMD_LEN+1] = {0}; 
+	//char reply[REPLY_BUF_SIZE] = {0};
+	//char netid[NET_ID_LEN+1]={0};
+	tWIFI_MACHINE_STATE wifi_machine_state;
+	
+	if(gwifi_state == WIFIMG_WIFI_DISABLED){
+		return -1;
+	}
+
+	/* pause scan thread */
+	   pause_wifi_scan_thread();
+	
+	/* check network exist in wpa_supplicant.conf */
+
+    wifi_machine_state = get_wifi_machine_state();
+    if(wifi_machine_state != CONNECTED_STATE && wifi_machine_state != DISCONNECTED_STATE){
+        ret = -1;
+        event_code = WIFIMG_DEV_BUSING_EVENT;
+        goto end;
+    }
+
+	
+	if(wpa_conf_network_info_exist() == 0){
+		ret = -1;
+		event_code = WIFIMG_NO_NETWORK_CONNECTING;
+		goto end;
+	}
+
+	
+
+	/* list_networks */
+	//sprintf(cmd, "%s", "LIST_NETWORKS");
+	strncpy(cmd, "LIST_NETWORKS", CMD_LEN);
+       cmd[CMD_LEN] = '\0';
+	ret = wifi_command(cmd, reply, reply_len);
+	if(ret){
+		printf("do list_networks error!\n");
+		ret = -1;
+		event_code = WIFIMG_CMD_OR_PARAMS_ERROR;
+	}
+	printf("do list_networks finished!\n");
+end:
+	if(ret != 0){
+	call_event_callback_function(event_code, NULL, event_label);
+	}	
+
+    /* resume scan thread */
+    resume_wifi_scan_thread();
+	
+	return ret;
+
+}
+
 static const aw_wifi_interface_t aw_wifi_interface = {
     aw_wifi_add_event_callback,
     aw_wifi_is_ap_connected,
@@ -1182,9 +1313,11 @@ static const aw_wifi_interface_t aw_wifi_interface = {
     aw_wifi_connect_ap,
     aw_wifi_connect_ap_key_mgmt,
     aw_wifi_connect_ap_auto,
+    aw_wifi_connect_ap_with_netid,
     aw_wifi_add_network,
     aw_wifi_disconnect_ap,
-    aw_wifi_remove_all_networks    
+    aw_wifi_remove_all_networks,
+    aw_wifi_list_networks
 };
 
 const aw_wifi_interface_t * aw_wifi_on(tWifi_event_callback pcb, int event_label)
@@ -1201,13 +1334,13 @@ const aw_wifi_interface_t * aw_wifi_on(tWifi_event_callback pcb, int event_label
         printf("wpa_suppplicant not running!\n");
         wifi_start_supplicant(0);
         do{
-        	usleep(300000);
-        	ret = wifi_connect_to_supplicant();
-        	if(!ret){
-        	    printf("Connected to wpa_supplicant\n");
-        	    break;
-        	}
-        	i++;
+		usleep(300000);
+		ret = wifi_connect_to_supplicant();
+		if(!ret){
+		    printf("Connected to wpa_supplicant!\n");
+		    break;
+		}
+		i++;
         }while(ret && i<10);
         if(ret < 0){
             if(pcb != NULL){
