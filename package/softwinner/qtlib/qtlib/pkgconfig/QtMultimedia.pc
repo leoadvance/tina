@@ -1,4 +1,4 @@
-prefix=/home/leo/MyQt/Qt4.8.6_R8
+prefix=/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include/QtMultimedia
@@ -11,9 +11,9 @@ lrelease_location=${prefix}/bin/lrelease
 
 Name: Qtmultimedia
 Description: Qtmultimedia Library
-Version: 4.8.6
+Version: 4.8.7
 Libs: -L${libdir} -lQtMultimedia 
-Libs.private: -L/home/leo/MyQt/Qt4.8.6_R8/lib  -lQtGui -L/home/leo/MyQt/Qt4.8.6_R8/lib -lQtNetwork -lQtCore -lpthread   
-Cflags: -DQT_SHARED -I/home/leo/MyQt/Qt4.8.6_R8/include -I${includedir}
+Libs.private: -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/lib  -lQtGui -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/lib -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread   
+Cflags: -DQT_SHARED -I/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/include -I${includedir}
 Requires: QtCore QtGui
 
