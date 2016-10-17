@@ -18,7 +18,7 @@ export QWS_MOUSE_PROTO=tslib:/dev/input/event5
 cd /bin/qtapp
 ./baklight 128
 
-logread -f > kernel.log
+logread -f >> kernel.log &
 
 export QWS_DISPLAY=Transformed:Rot270
 ./Hodor -qws -font &
