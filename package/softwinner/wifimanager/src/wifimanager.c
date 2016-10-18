@@ -1071,15 +1071,23 @@ static int aw_wifi_remove_network(char *ssid, tKEY_MGMT key_mgmt)
         printf("Error: ssid is null!\n");
         return -1;
     }
-    
+
+    /* pause scan thread */
+     pause_wifi_scan_thread();
+		
     /* check AP is exist in wpa_supplicant.conf */
     len = NET_ID_LEN+1;
     ret = wpa_conf_ssid2netid(ssid, key_mgmt, net_id, &len);
     if(ret <= 0){
-        printf("Warning: %s not in wpa_supplicant.conf!\n", ssid);
+        printf("Warning: %s is not in wpa_supplicant.conf!\n", ssid);
         return 0;
     }
-    
+    else if(ret == 2)
+    {
+	 printf("Warning: %s exists in wpa_supplicant.conf, but the key_mgmt is not accordant!\n", ssid);
+	 return 0;
+    }
+
     /* cancel saved in wpa_supplicant.conf */
     sprintf(cmd, "REMOVE_NETWORK %s", net_id);
     ret = wifi_command(cmd, reply, sizeof(reply));
@@ -1095,7 +1103,10 @@ static int aw_wifi_remove_network(char *ssid, tKEY_MGMT key_mgmt)
         printf("do save config error!\n");
         return -1;
     }
-    
+
+    /* resume scan thread */
+    resume_wifi_scan_thread();
+	
     return 0;
 }
 
@@ -1316,6 +1327,7 @@ static const aw_wifi_interface_t aw_wifi_interface = {
     aw_wifi_connect_ap_with_netid,
     aw_wifi_add_network,
     aw_wifi_disconnect_ap,
+    aw_wifi_remove_network,
     aw_wifi_remove_all_networks,
     aw_wifi_list_networks
 };
