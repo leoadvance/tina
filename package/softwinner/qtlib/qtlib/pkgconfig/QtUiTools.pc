@@ -1,4 +1,4 @@
-prefix=/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install
+prefix=/home/leo/Qt/Qt-4.8.7-R8-opengles
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include/QtUiTools
@@ -8,7 +8,7 @@ Name: Qtuitools
 Description: Qtuitools Library
 Version: 4.8.7
 Libs: -L${libdir} -lQtUiTools 
-Libs.private: -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/lib  -lQtXml -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/lib -lQtGui -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread   
-Cflags: -I/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/include -I${includedir}
+Libs.private: -L/home/leo/Desktop/qt-everywhere-opensource-src-4.8.7/lib  -lQtXml -L/home/leo/Desktop/qt-everywhere-opensource-src-4.8.7/lib -lQtGui -L/home/leo/Desktop/qt-everywhere-opensource-src-4.8.7/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread   
+Cflags: -I/home/leo/Qt/Qt-4.8.7-R8-opengles/include -I${includedir}
 Requires: QtXml
 
