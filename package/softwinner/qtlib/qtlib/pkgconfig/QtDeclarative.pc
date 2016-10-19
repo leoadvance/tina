@@ -1,4 +1,4 @@
-prefix=/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install
+prefix=/home/leo/Qt/Qt-4.8.7-R8-opengles
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include/QtDeclarative
@@ -13,7 +13,7 @@ Name: Qtdeclarative
 Description: Qtdeclarative Library
 Version: 4.8.7
 Libs: -L${libdir} -lQtDeclarative 
-Libs.private: -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/lib  -lQtScript -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/lib -lQtSql -lQtGui -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread -lrt  
-Cflags: -DQT_SHARED -I/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/include -I${includedir}
+Libs.private: -L/home/leo/Qt/Qt-4.8.7-R8-opengles/lib  -lQtScript -L/home/leo/Qt/Qt-4.8.7-R8-opengles/lib -lQtSql -lQtGui -L/home/leo/Qt/Qt-4.8.7-R8-opengles/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread -lrt  
+Cflags: -DQT_SHARED -I/home/leo/Qt/Qt-4.8.7-R8-opengles/include -I${includedir}
 Requires: QtCore QtGui
 

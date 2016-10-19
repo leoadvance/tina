@@ -1286,8 +1286,7 @@ static int aw_wifi_list_networks(char *reply, size_t reply_len, int event_label)
 
 	
 	if(wpa_conf_network_info_exist() == 0){
-		ret = -1;
-		event_code = WIFIMG_NO_NETWORK_CONNECTING;
+		ret = 0;
 		goto end;
 	}
 

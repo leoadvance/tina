@@ -1,4 +1,4 @@
-prefix=/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install
+prefix=/home/leo/Qt/Qt-4.8.7-R8-opengles
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include/QtCore
@@ -13,6 +13,6 @@ Name: Qtcore
 Description: Qtcore Library
 Version: 4.8.7
 Libs: -L${libdir} -lQtCore 
-Libs.private: -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/lib  -lpthread -lm -ldl -lrt  
-Cflags: -DQT_SHARED -I/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/include -I${includedir}
+Libs.private: -L/home/leo/Qt/Qt-4.8.7-R8-opengles/lib  -lpthread -lm -ldl -lrt  
+Cflags: -DQT_SHARED -I/home/leo/Qt/Qt-4.8.7-R8-opengles/include -I${includedir}
 
