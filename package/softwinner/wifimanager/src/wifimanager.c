@@ -994,6 +994,11 @@ if(gwifi_state == WIFIMG_WIFI_DISABLED){
 	return -1;
 }
 
+/* pase scan thread */
+pause_wifi_scan_thread();
+
+
+
 wifi_machine_state = get_wifi_machine_state();
 if(wifi_machine_state != CONNECTED_STATE && wifi_machine_state != DISCONNECTED_STATE){
 	ret = -1;
@@ -1015,6 +1020,8 @@ connecting_ap_event_label = event_label;
 
 /* remove disconnecting flag */
 disconnecting = 0;
+
+
 
 	/* selected_network */
 		sprintf(cmd, "SELECT_NETWORK %s", net_id);
@@ -1046,7 +1053,9 @@ end:
 	call_event_callback_function(event_code, NULL, event_label);
 	}
 	
-	
+   /* resume scan thread */ 
+    resume_wifi_scan_thread();
+   
 	return ret;
 
    
