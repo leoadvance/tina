@@ -1,4 +1,4 @@
-prefix=/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install
+prefix=/home/leo/Qt/Qt-4.8.7-R8-opengles
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include/QtHelp
@@ -13,7 +13,7 @@ Name: Qthelp
 Description: Qthelp Library
 Version: 4.8.7
 Libs: -L${libdir} -lQtHelp 
-Libs.private: -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/lib  -lQtSql -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/lib -lQtGui -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread -lQtCLucene  
-Cflags: -DQT_SHARED -I/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/include -I${includedir}
+Libs.private: -L/home/leo/Qt/Qt-4.8.7-R8-opengles/lib  -lQtSql -L/home/leo/Qt/Qt-4.8.7-R8-opengles/lib -lQtGui -L/home/leo/Qt/Qt-4.8.7-R8-opengles/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread -lQtCLucene  
+Cflags: -DQT_SHARED -I/home/leo/Qt/Qt-4.8.7-R8-opengles/include -I${includedir}
 Requires: QtNetwork QtSql QtXml
 

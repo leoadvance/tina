@@ -1,4 +1,4 @@
-prefix=/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install
+prefix=/home/leo/Qt/Qt-4.8.7-R8-opengles
 exec_prefix=${prefix}
 libdir=${prefix}/lib
 includedir=${prefix}/include/QtOpenGL
@@ -13,7 +13,7 @@ Name: Qtopengl
 Description: Qtopengl Library
 Version: 4.8.7
 Libs: -L${libdir} -lQtOpenGL 
-Libs.private: -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/lib -L/usr/X11R6/lib  -lQtGui -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/lib -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread -lEGL -lEGL -L/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/mkspecs/linux-arm-gnueabi-g++/lib -lGLESv2  
-Cflags: -DQT_SHARED -I/mnt/sdb1/beyond/tina/qt-everywhere-opensource-src-4.8.7/arm-install/arm-install/include -I${includedir}
+Libs.private: -L/home/leo/Qt/Qt-4.8.7-R8-opengles/lib -L/usr/X11R6/lib  -lQtGui -L/home/leo/Qt/Qt-4.8.7-R8-opengles/lib -L/home/leo/Qt/Qt-4.8.7-R8-opengles/mkspecs/linux-arm-gnueabi-g++/lib -lEGL -lQtNetwork -lQtCore -lpthread -lEGL -lEGL -L/home/leo/Qt/Qt-4.8.7-R8-opengles/mkspecs/linux-arm-gnueabi-g++/lib -lGLESv2  
+Cflags: -DQT_SHARED -I/home/leo/Qt/Qt-4.8.7-R8-opengles/include -I${includedir}
 Requires: QtCore QtGui
 
