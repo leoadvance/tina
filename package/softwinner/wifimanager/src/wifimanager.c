@@ -704,7 +704,14 @@ static int wifi_connect_ap_inner(const char *ssid, tKEY_MGMT key_mgmt, const cha
 		    wifi_command(cmd, reply, sizeof(reply));
 
             ret = -1;
-            event_code = WIFIMG_NETWORK_NOT_EXIST;
+            if(event == PASSWORD_INCORRECT)
+	    {
+	    	event_code = WIFIMG_PASSWORD_FAILED;
+	    }
+	    else
+	    {
+            	event_code = WIFIMG_NETWORK_NOT_EXIST;
+	    }
             goto end;
         }else if(event == OBTAINING_IP_TIMEOUT){
             if(is_exist == 1 || is_exist == 3){
@@ -719,6 +726,7 @@ static int wifi_connect_ap_inner(const char *ssid, tKEY_MGMT key_mgmt, const cha
 		    wifi_command(cmd, reply, sizeof(reply));
             ret = 0;
         }else{
+            event_code = WIFIMG_NETWORK_NOT_EXIST;
             ret = -1;
         }
     }else if(state == L2CONNECTED_STATE || state == CONNECTED_STATE){
@@ -734,6 +742,7 @@ static int wifi_connect_ap_inner(const char *ssid, tKEY_MGMT key_mgmt, const cha
 		wifi_command(cmd, reply, sizeof(reply));
         ret = 0;
     }else{
+        event_code = WIFIMG_NETWORK_NOT_EXIST;
         ret = -1;
     }
     
@@ -744,7 +753,6 @@ end:
     //restore state when call wrong
     if(ret != 0){
         set_wifi_machine_state(DISCONNECTED_STATE);
-        event_code = WIFIMG_NETWORK_NOT_EXIST;
         return ret;
     }
     
@@ -994,6 +1002,11 @@ if(gwifi_state == WIFIMG_WIFI_DISABLED){
 	return -1;
 }
 
+/* pase scan thread */
+pause_wifi_scan_thread();
+
+
+
 wifi_machine_state = get_wifi_machine_state();
 if(wifi_machine_state != CONNECTED_STATE && wifi_machine_state != DISCONNECTED_STATE){
 	ret = -1;
@@ -1015,6 +1028,8 @@ connecting_ap_event_label = event_label;
 
 /* remove disconnecting flag */
 disconnecting = 0;
+
+
 
 	/* selected_network */
 		sprintf(cmd, "SELECT_NETWORK %s", net_id);
@@ -1046,7 +1061,9 @@ end:
 	call_event_callback_function(event_code, NULL, event_label);
 	}
 	
-	
+   /* resume scan thread */ 
+    resume_wifi_scan_thread();
+   
 	return ret;
 
    
@@ -1082,7 +1099,7 @@ static int aw_wifi_remove_network(char *ssid, tKEY_MGMT key_mgmt)
         printf("Warning: %s is not in wpa_supplicant.conf!\n", ssid);
         return 0;
     }
-    else if(ret == 2)
+    else if(!(ret & (0x01<<1) ))
     {
 	 printf("Warning: %s exists in wpa_supplicant.conf, but the key_mgmt is not accordant!\n", ssid);
 	 return 0;

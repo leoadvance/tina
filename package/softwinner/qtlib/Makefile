@@ -90,6 +90,8 @@ define Package/qtlib/install
 	$(INSTALL_BIN) ./etc/startqt $(1)/etc/init.d/startqt
 	$(INSTALL_BIN) ./bin/BranQt4 $(1)/bin/qtapp/BranQt4
 	$(INSTALL_BIN) ./bin/Hodor $(1)/bin/qtapp/Hodor
+	$(INSTALL_BIN) ./bin/SysSVN $(1)/bin/SysSVN
+	$(INSTALL_BIN) ./bin/ts_calibrate $(1)/bin/qtapp/ts_calibrate
 	$(INSTALL_BIN) ./bin/baklight $(1)/bin/qtapp/baklight
 	$(INSTALL_BIN) ./bin/bran.config $(1)/bin/qtapp/bran.config
 	$(INSTALL_BIN) ./bin/BranTip.config $(1)/bin/qtapp/BranTip.config
