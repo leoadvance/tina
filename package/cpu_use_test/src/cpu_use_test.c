@@ -55,7 +55,7 @@ int Show(char *framebuffer_devices)
 		return -4;
 	}
 
-	for(count = 0; count <100; count ++)
+	for( ; ; )
 	{
 		for(x = 0; x < vinfo.xres; x ++)
 		{
