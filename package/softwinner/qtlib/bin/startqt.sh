@@ -21,4 +21,4 @@ cd /bin/qtapp
 logread -f >> kernel.log &
 
 export QWS_DISPLAY=Transformed:Rot270
-./Hodor -qws -font &
+./BranQt4 -qws -font &
