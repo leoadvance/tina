@@ -1,3 +1,7 @@
+20161117
+修复Wi-Fi connect_ap_with_netid错误
+增加关机充电测试版本
+
 20161109
 增加MD5校验，增加curl命令(获取公网IP)
 
