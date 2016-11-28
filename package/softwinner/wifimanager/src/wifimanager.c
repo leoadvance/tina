@@ -669,28 +669,56 @@ static int wifi_connect_ap_inner(const char *ssid, tKEY_MGMT key_mgmt, const cha
         ret = -1;
         goto end;
     }
-    
-    /* check timeout */
-    start_check_connect_timeout(0);
-    
+
+	reset_assoc_reject_count();
+
     /* wait for check status connected/disconnected */
     i = 0;
     do {
-        usleep(500000);
-        
+        usleep(200000);
+
         state = get_wifi_machine_state();
         event = get_cur_wifi_event();
         /* password incorrect*/
         if ((state == DISCONNECTED_STATE) && (event == PASSWORD_INCORRECT)){
-        	  printf("wifi_connect_ap_inner: password failed!\n");
+		  printf("wifi_connect_ap_inner: password failed!\n");
             break;
         }
 
+		if(get_assoc_reject_count() >= MAX_ASSOC_REJECT_COUNT){
+			reset_assoc_reject_count();
+			printf("wifi_connect_ap_inner: assoc reject %s times\n", MAX_ASSOC_REJECT_COUNT);
+			break;
+		}
+
         i++;
-    } while((state != L2CONNECTED_STATE) && (state != CONNECTED_STATE) && (i < 45));
-    
-    if(state == DISCONNECTED_STATE){
-        if(event == PASSWORD_INCORRECT || event == CONNECT_AP_TIMEOUT){
+    } while((state != L2CONNECTED_STATE) && (state != CONNECTED_STATE) && (i < 225));
+
+	if (state == CONNECTING_STATE) { /* It can't connect AP */
+		/* stop connect */
+		sprintf(cmd, "%s", "DISCONNECT");
+		wifi_command(cmd, reply, sizeof(reply));
+		set_wifi_machine_state(DISCONNECTED_STATE);
+		set_cur_wifi_event(CONNECT_AP_TIMEOUT);
+
+		/* disable network in wpa_supplicant.conf */
+		sprintf(cmd, "DISABLE_NETWORK %s", netid2);
+		wifi_command(cmd, reply, sizeof(reply));
+
+		/* cancel saved in wpa_supplicant.conf */
+		sprintf(cmd, "REMOVE_NETWORK %s", netid2);
+		wifi_command(cmd, reply, sizeof(reply));
+
+		/* save config */
+		sprintf(cmd, "%s", "SAVE_CONFIG");
+		wifi_command(cmd, reply, sizeof(reply));
+
+		ret = -1;
+		printf("connect ap inner:still connecting!\n");
+		event_code = WIFIMG_NETWORK_NOT_EXIST;
+		goto end;
+	}else if(state == DISCONNECTED_STATE){ /* Errot when connecting */
+        if (event == PASSWORD_INCORRECT) {
             /* disable network in wpa_supplicant.conf */
             sprintf(cmd, "DISABLE_NETWORK %s", netid2);
             wifi_command(cmd, reply, sizeof(reply));
@@ -704,14 +732,8 @@ static int wifi_connect_ap_inner(const char *ssid, tKEY_MGMT key_mgmt, const cha
 		    wifi_command(cmd, reply, sizeof(reply));
 
             ret = -1;
-            if(event == PASSWORD_INCORRECT)
-	    {
-	    	event_code = WIFIMG_PASSWORD_FAILED;
-	    }
-	    else
-	    {
-            	event_code = WIFIMG_NETWORK_NOT_EXIST;
-	    }
+            event_code = WIFIMG_PASSWORD_FAILED;
+			printf("connect ap inner:passwd failed!\n");
             goto end;
         }else if(event == OBTAINING_IP_TIMEOUT){
             if(is_exist == 1 || is_exist == 3){
@@ -724,6 +746,7 @@ static int wifi_connect_ap_inner(const char *ssid, tKEY_MGMT key_mgmt, const cha
             /* save config */
 		    sprintf(cmd, "%s", "SAVE_CONFIG");
 		    wifi_command(cmd, reply, sizeof(reply));
+			printf("connect ap inner:obtian IP time out!\n");
             ret = 0;
         }else{
             event_code = WIFIMG_NETWORK_NOT_EXIST;
@@ -740,6 +763,7 @@ static int wifi_connect_ap_inner(const char *ssid, tKEY_MGMT key_mgmt, const cha
         /* save config */
 		sprintf(cmd, "%s", "SAVE_CONFIG");
 		wifi_command(cmd, reply, sizeof(reply));
+		printf("wifi connected in inner!\n");
         ret = 0;
     }else{
         event_code = WIFIMG_NETWORK_NOT_EXIST;
@@ -847,12 +871,6 @@ static int aw_wifi_connect_ap_key_mgmt(const char *ssid, tKEY_MGMT key_mgmt, con
     /* pause scan thread */
     pause_wifi_scan_thread();
 
-    /* ensure wifi disconnect */
-    state = get_wifi_machine_state();
-    if(state == CONNECTED_STATE){
-        aw_wifi_disconnect_ap(0x7fffffff);
-    }
-    
     ret = wifi_connect_ap_inner(p_ssid, key_mgmt, passwd, event_label);
 
 end:
@@ -934,12 +952,6 @@ static int aw_wifi_connect_ap(const char *ssid, const char *passwd, int event_la
         /* pase scan thread */
         pause_wifi_scan_thread();
 
-        /* ensure disconnected */
-        state = get_wifi_machine_state();
-        if (state == CONNECTED_STATE){
-            aw_wifi_disconnect_ap(0x7fffffff);
-        } 
-
         ret = wifi_connect_ap_inner(p_ssid, WIFIMG_NONE, passwd, event_label);
 	  }else{
         if((key[1] == 0) && (key[2] == 0)){
@@ -955,18 +967,12 @@ static int aw_wifi_connect_ap(const char *ssid, const char *passwd, int event_la
         /* pause scan thread */
         pause_wifi_scan_thread();
 
-        /* ensure disconnected */
-        state = get_wifi_machine_state();
-        if(state == CONNECTED_STATE){
-            aw_wifi_disconnect_ap(0x7fffffff);
-        }
-        
         /* wpa-psk */
         if(key[1] == 1){
             /* try WPA-PSK */
 	          ret = wifi_connect_ap_inner(p_ssid, WIFIMG_WPA_PSK, passwd, event_label);
             if(ret == 0){
-                return ret;
+                goto end;
             }
         }
 	  		
@@ -1050,10 +1056,13 @@ disconnecting = 0;
 		event_code = WIFIMG_CMD_OR_PARAMS_ERROR;
 	}
 
-    /* connected */
-    set_wifi_machine_state(CONNECTED_STATE);
+  
 
-    	printf("do wifi connect ap with netid finished!\n");
+
+    /* check timeout */
+    start_check_connect_timeout(0);
+
+	printf("do wifi connect ap with netid finished!\n");
 
 end:
 	if(ret != 0){
@@ -1331,6 +1340,26 @@ end:
 
 }
 
+/*
+*Ap with certain key_mgmt exists in the .conf file:return is 0, get the *net_id as expectation;
+*else:return -1
+*/
+static int aw_wifi_get_netid(const char *ssid, tKEY_MGMT key_mgmt, char *net_id)
+{
+	int ret = -1, len = 3;
+
+	/* pause scan thread */
+	pause_wifi_scan_thread();
+	ret = wpa_conf_is_ap_exist(ssid, key_mgmt, net_id, &len);
+	/* resume scan thread */
+    resume_wifi_scan_thread();
+	if(ret == 1 || ret == 3){
+		return 0;
+	}else{
+		return -1;
+	}
+}
+
 static const aw_wifi_interface_t aw_wifi_interface = {
     aw_wifi_add_event_callback,
     aw_wifi_is_ap_connected,
@@ -1344,7 +1373,8 @@ static const aw_wifi_interface_t aw_wifi_interface = {
     aw_wifi_disconnect_ap,
     aw_wifi_remove_network,
     aw_wifi_remove_all_networks,
-    aw_wifi_list_networks
+    aw_wifi_list_networks,
+    aw_wifi_get_netid
 };
 
 const aw_wifi_interface_t * aw_wifi_on(tWifi_event_callback pcb, int event_label)
@@ -1393,7 +1423,8 @@ const aw_wifi_interface_t * aw_wifi_on(tWifi_event_callback pcb, int event_label
         connected = wpa_conf_is_ap_connected(netid, &len);
         if(connected == 1){
             set_wifi_machine_state(CONNECTED_STATE);
-            send_wifi_event(AP_CONNECTED, event_label);
+			set_cur_wifi_event(AP_CONNECTED);
+			call_event_callback_function(WIFIMG_NETWORK_CONNECTED, NULL, event_label);
             ret = 0;
         }else{
             connecting_ap_event_label = event_label;
