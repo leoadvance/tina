@@ -52,7 +52,7 @@ static int insmod(const char *filename, const char *args)
     ret = init_module(module, size, args);
 
     free(module);
-    
+
 #else
 
     int ret = 0;
@@ -82,14 +82,14 @@ static int rmmod(const char *modname)
     if (ret != 0)
         printf("Unable to unload driver module \"%s\": %s\n",
              modname, strerror(errno));
-             
+
 #else
-    
+
     int ret = 0;
     char cmd[256] = {0};
     sprintf(cmd,"rmmod '%s'", modname);
     system(cmd);
-    
+
 #endif
     return ret;
 }
@@ -104,7 +104,7 @@ int wifi_load_driver(const char *path, const char *args)
     char * p_s = NULL, * p_e = NULL;
     char *p_strstr_wlan  = NULL;
     FILE *fp        = NULL;
-    
+
     if (!path) {
         printf("driver path is NULL!\n");
         return -1;
@@ -112,7 +112,7 @@ int wifi_load_driver(const char *path, const char *args)
 
     p_s = strrchr(path, '/');
     p_s++;
-    
+
     p_e = strrchr(path, '.');
     p_e--;
 
@@ -120,17 +120,17 @@ int wifi_load_driver(const char *path, const char *args)
     while(p_s <= p_e){
         name[i] = *p_s;
         i++;
-        p_s++;   
+        p_s++;
     }
     name[i] = '\0';
     printf("driver name %s\n", name);
-    
+
     if (insmod(path, args) < 0) {
         printf("insmod %s %s firmware failed!\n", path, args);
         rmmod(name);//it may be load driver already,try remove it.
         return -1;
     }
-    
+
     do{
         fp=fopen("/proc/net/wireless", "r");
         if (!fp) {
@@ -143,16 +143,16 @@ int wifi_load_driver(const char *path, const char *args)
             printf("faied to read proc/net/wireless\n");
         }
         fclose(fp);
-    
+
         printf("loading wifi driver...\n");
         p_strstr_wlan = strstr(tmp_buf, "wlan0");
         if (p_strstr_wlan != NULL) {
             break;
         }
         usleep(200000);// 200ms
-  
+
     } while (count++ <= TIME_COUNT);
-  
+
     if(count > TIME_COUNT) {
         printf("timeout, register netdevice wlan0 failed.\n");
         rmmod(name);
@@ -165,9 +165,9 @@ int wifi_unload_driver(const char *name)
 {
     if (rmmod(name) == 0){
         usleep(2000000);
-    	return 0;
+	return 0;
     }else
-  	  return -1;
+	  return -1;
 }
 
 int ensure_entropy_file_exists()
@@ -239,7 +239,7 @@ int update_ctrl_interface(const char *config_file) {
     }
 
     strcpy(ifc, CONTROL_IFACE_PATH);
-    
+
     /* Assume file is invalid to begin with */
     ret = -1;
     /*
@@ -352,7 +352,7 @@ int ensure_config_file_exists(const char *config_file)
 int wifi_start_supplicant(int p2p_supported)
 {
     char cmd[512] = {0};
-    	
+
     /* Before starting the daemon, make sure its config file exists */
     if (ensure_config_file_exists(SUPP_CONFIG_FILE) < 0) {
         printf("Wi-Fi will not be enabled\n");
@@ -368,12 +368,12 @@ int wifi_start_supplicant(int p2p_supported)
 
     /* Reset sockets used for exiting from hung state */
     exit_sockets[0] = exit_sockets[1] = -1;
-    
+
     /* start wpa_supplicant */
     strncpy(cmd, "/etc/wifi/wifi start", 511);
     cmd[511] = '\0';
     system(cmd);
-    
+
     return 0;
 }
 
@@ -444,7 +444,7 @@ int wifi_send_command(const char *cmd, char *reply, size_t *reply_len)
         printf("Not connected to wpa_supplicant - \"%s\" command dropped.\n", cmd);
         return -1;
     }
-    
+
     ret = wpa_ctrl_request(ctrl_conn, cmd, strlen(cmd), reply, reply_len, NULL);
     if (ret == -2) {
         printf("'%s' command timed out.\n", cmd);
@@ -517,9 +517,9 @@ int wifi_wait_on_socket(char *buf, size_t buflen)
     /*
      * Events strings are in the format
      *
-     *     IFNAME=iface <N>CTRL-EVENT-XXX 
+     *     IFNAME=iface <N>CTRL-EVENT-XXX
      *        or
-     *     <N>CTRL-EVENT-XXX 
+     *     <N>CTRL-EVENT-XXX
      *
      * where N is the message level in numerical form (0=VERBOSE, 1=DEBUG,
      * etc.) and XXX is the event name. The level information is not useful
@@ -599,14 +599,14 @@ int wifi_command(char const *cmd, char *reply, size_t reply_len)
     if(!cmd || !cmd[0]){
         return -1;
     }
-    
+
     printf("do cmd %s\n", cmd);
-    
+
     --reply_len; // Ensure we have room to add NUL termination.
     if (wifi_send_command(cmd, reply, &reply_len) != 0) {
         return -1;
     }
-    
+
     // Strip off trailing newline.
     if (reply_len > 0 && reply[reply_len-1] == '\n') {
         reply[reply_len-1] = '\0';

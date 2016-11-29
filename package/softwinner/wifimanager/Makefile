@@ -100,6 +100,7 @@ define Package/wifimanager-demo/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/wifi_remove_network_test $(1)/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/wifi_connect_ap_with_netid_test $(1)/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/wifi_get_netid_test $(1)/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/wifi_add_network_test $(1)/bin
 	$(INSTALL_BIN) ./wifitest.sh $(1)/etc/wifi
 endef
 

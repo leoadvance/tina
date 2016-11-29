@@ -34,7 +34,7 @@ int update_scan_results()
     int i=0;
 
     printf("update scan results enter\n");
-    
+
     pthread_mutex_lock(&thread_run_mutex);
     scan_completed = 0;
     pthread_cond_signal(&thread_run_cond);
@@ -54,8 +54,8 @@ int get_scan_results_inner(char *result, int *len)
 {
     int index = 0;
     char *ptr = NULL;
-    
-    pthread_mutex_lock(&scan_mutex); 
+
+    pthread_mutex_lock(&scan_mutex);
 
     if(*len <= scan_results_len){
         strncpy(result, scan_results, *len-1);
@@ -69,20 +69,20 @@ int get_scan_results_inner(char *result, int *len)
         strncpy(result, scan_results, scan_results_len);
         result[scan_results_len] = '\0';
     }
-    
+
     pthread_mutex_unlock(&scan_mutex);
-    
+
     return 0;
 }
 
 int is_network_exist(const char *ssid, tKEY_MGMT key_mgmt)
 {
     int ret = 0, i = 0, key[4] = {0};
-    
+
     for(i=0; i<4; i++){
         key[i]=0;
     }
-    
+
     get_key_mgmt(ssid, key);
     if(key_mgmt == WIFIMG_NONE){
         if(key[0] == 1){
@@ -99,7 +99,7 @@ int is_network_exist(const char *ssid, tKEY_MGMT key_mgmt)
     }else{
         ;
     }
-    
+
     return ret;
 }
 
@@ -110,15 +110,15 @@ int get_key_mgmt(const char *ssid, int key_mgmt_info[])
     char *pflag = NULL;
     char flag[128], pssid[SSID_LEN + 1];
     int  len = 0, i = 0;
-    
+
     printf("enter get_key_mgmt, ssid %s\n", ssid);
-    
-    key_mgmt_info[KEY_NONE_INDEX] = 0;    	
-    key_mgmt_info[KEY_WEP_INDEX] = 0;    	
+
+    key_mgmt_info[KEY_NONE_INDEX] = 0;
+    key_mgmt_info[KEY_WEP_INDEX] = 0;
     key_mgmt_info[KEY_WPA_PSK_INDEX] = 0;
-    
+
     pthread_mutex_lock(&scan_mutex);
-    
+
     /* first line end */
     ptr = strchr(scan_results, '\n');
     if(!ptr){
@@ -178,12 +178,12 @@ int get_key_mgmt(const char *ssid, int key_mgmt_info[])
             break;
         }
     }
-    
+
     pthread_mutex_unlock(&scan_mutex);
-    
+
     return 0;
-    
-    
+
+
 }
 
 void *wifi_scan_thread(void *args)
