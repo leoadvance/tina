@@ -37,27 +37,27 @@ static int get_net_ip(const char *if_name, char *ip, int *len, int *vflag)
             // is a valid IP6 Address
             tmpAddrPtr=&((struct sockaddr_in *)pifaddr->ifa_addr)->sin_addr;
             if(strcmp(pifaddr->ifa_name, if_name) == 0){
-                inet_ntop(AF_INET6, tmpAddrPtr, ip, INET6_ADDRSTRLEN);    
+                inet_ntop(AF_INET6, tmpAddrPtr, ip, INET6_ADDRSTRLEN);
                 *vflag=6;
                 break;
             }
-       } 
+       }
        pifaddr=pifaddr->ifa_next;
     }
 
     if(ifAddrStruct != NULL){
         freeifaddrs(ifAddrStruct);
     }
-    return 0;    	
+    return 0;
 }
 
 int is_ip_exist()
 {
     int len = 0, vflag = 0;
     char ipaddr[INET6_ADDRSTRLEN];
-    
+
     get_net_ip("wlan0", ipaddr, &len, &vflag);
-    return vflag;	
+    return vflag;
 }
 
 void *udhcpc_thread(void *args)
@@ -65,10 +65,10 @@ void *udhcpc_thread(void *args)
     int len = 0, vflag = 0, times = 0;
     char ipaddr[INET6_ADDRSTRLEN];
     char cmd[256] = {0}, reply[8] = {0};
-	  
+
     /* restart udhcpc */
     system("/etc/wifi/udhcpc_wlan0 restart");
-	  
+
     /* check ip exist */
     len = INET6_ADDRSTRLEN;
     times = 0;
@@ -81,7 +81,7 @@ void *udhcpc_thread(void *args)
         get_net_ip("wlan0", ipaddr, &len, &vflag);
         times++;
     }while((vflag == 0) && (times < 310));
-	  
+
     printf("vflag= %d\n",vflag);
     if(vflag != 0){
         set_wifi_machine_state(CONNECTED_STATE);
@@ -91,16 +91,16 @@ void *udhcpc_thread(void *args)
         printf("udhcpc wlan0 timeout, pid %d!\n",pthread_self());
         /* stop dhcpc thread */
         system("/etc/wifi/udhcpc_wlan0 stop");
-    	  
-    	/* send disconnect */			
+
+	/* send disconnect */
         sprintf(cmd, "%s", "DISCONNECT");
         wifi_command(cmd, reply, sizeof(reply));
-        
+
         set_wifi_machine_state(DISCONNECTED_STATE);
 		set_cur_wifi_event(OBTAINING_IP_TIMEOUT);
         call_event_callback_function(WIFIMG_CONNECT_TIMEOUT, NULL, connecting_ap_event_label);
     }
-	  
+
     pthread_exit(NULL);
 }
 

@@ -1,5 +1,6 @@
 20161128
 P2.5支持RTC, light和button
+修改Wi-Fi库
 
 20161117
 修复Wi-Fi connect_ap_with_netid错误
