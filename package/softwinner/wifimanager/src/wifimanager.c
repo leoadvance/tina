@@ -1091,6 +1091,9 @@ char cmd[CMD_LEN+1] = {0};
 char reply[REPLY_BUF_SIZE] = {0};
 tWIFI_MACHINE_STATE wifi_machine_state;
 const char *p_ssid = NULL;
+tWIFI_MACHINE_STATE  state;
+tWIFI_EVENT_INNER    event;
+
 
 if(gwifi_state == WIFIMG_WIFI_DISABLED){
 	return -1;
@@ -1134,6 +1137,9 @@ disconnecting = 0;
 			goto end;
 		}
 
+	 /* save netid */
+	 strcpy(netid_connecting, net_id);
+
      /*reconnect*/
 	strncpy(cmd, "RECONNECT", CMD_LEN);
        cmd[CMD_LEN] = '\0';
@@ -1146,19 +1152,68 @@ disconnecting = 0;
 
 
 
+	/* wait for check status connected/disconnected */
+	 reset_assoc_reject_count();
+	 i = 0;
+	 do {
+		 usleep(200000);
 
-    /* check timeout */
-    start_check_connect_timeout(0);
+		 state = get_wifi_machine_state();
+		 event = get_cur_wifi_event();
+		 /* password incorrect*/
+		 if ((state == DISCONNECTED_STATE) && (event == PASSWORD_INCORRECT)){
+						 printf("wifi_connect_ap_inner: password failed!\n");
+			 break;
+		 }
 
-	printf("do wifi connect ap with netid finished!\n");
+		 if(get_assoc_reject_count() >= MAX_ASSOC_REJECT_COUNT){
+			 reset_assoc_reject_count();
+			 printf("wifi_connect_ap_inner: assoc reject %s times\n", MAX_ASSOC_REJECT_COUNT);
+			 break;
+		 }
+
+		 i++;
+	 } while((state != L2CONNECTED_STATE) && (state != CONNECTED_STATE) && (i < 225));
+
+	 if (state == CONNECTING_STATE) { /* It can't connect AP */
+		 /* stop connect */
+		 sprintf(cmd, "%s", "DISCONNECT");
+		 wifi_command(cmd, reply, sizeof(reply));
+		 set_wifi_machine_state(DISCONNECTED_STATE);
+		 set_cur_wifi_event(CONNECT_AP_TIMEOUT);
+		 /* disable network in wpa_supplicant.conf */
+		 sprintf(cmd, "DISABLE_NETWORK %s", net_id);
+		 wifi_command(cmd, reply, sizeof(reply));
+		 ret = -1;
+		 event_code = WIFIMG_NETWORK_NOT_EXIST;
+		 goto end;
+	 }else if(state == DISCONNECTED_STATE){ /* Errot when connecting */
+		 if (event == PASSWORD_INCORRECT) {
+			 /* disable network in wpa_supplicant.conf */
+			 sprintf(cmd, "DISABLE_NETWORK %s", net_id);
+			 wifi_command(cmd, reply, sizeof(reply));
+			 ret = -1;
+			 event_code = WIFIMG_PASSWORD_FAILED;
+			 goto end;
+		 }else if(event == OBTAINING_IP_TIMEOUT){
+			 ret = 0;
+		 }else{
+			 ;
+		 }
+	 }else if(state == L2CONNECTED_STATE || state == CONNECTED_STATE){
+		 ret = 0;
+	 }else{
+		 ;
+	 }
 
 end:
 	if(ret != 0){
 	call_event_callback_function(event_code, NULL, event_label);
 	}
-	 usleep(2000000);
    /* resume scan thread */
     resume_wifi_scan_thread();
+
+	printf("do wifi connect ap with netid finished!\n");
 
 	return ret;
 
