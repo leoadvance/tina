@@ -9,15 +9,6 @@
  static void
  signal_shutdown(int signal, siginfo_t *siginfo, void *data)
  {
-@@ -88,7 +88,7 @@ main(int argc, char **argv)
-
-	pid = fork();
-	if (!pid) {
--		char *kmod[] = { "/sbin/kmodloader", "/etc/modules-boot.d/", NULL };
-+		char *kmod[] = { "/sbin/kmodloader", "/etc/modules.d/", NULL };
-
-		if (debug < 3) {
-			int fd = open("/dev/null", O_RDWR);
 @@ -108,7 +108,7 @@ main(int argc, char **argv)
 	if (pid <= 0)
 		ERROR("Failed to start kmodloader instance\n");

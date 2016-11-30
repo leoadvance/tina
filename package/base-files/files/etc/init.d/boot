@@ -35,7 +35,7 @@ boot() {
 	grep -q debugfs /proc/filesystems && /bin/mount -o noatime -t debugfs debugfs /sys/kernel/debug
 	[ "$FAILSAFE" = "true" ] && touch /tmp/.failsafe
 
-	#/sbin/kmodloader
+
 
 	# allow wifi modules time to settle
 	#sleep 1
@@ -73,6 +73,8 @@ boot() {
 			fi
 		done
 	}
+
 	echo Start Qt! > /dev/ttyS0
 	. /bin/qtapp/startqt.sh
+	/sbin/kmodloader /etc/modules.d/
 }
