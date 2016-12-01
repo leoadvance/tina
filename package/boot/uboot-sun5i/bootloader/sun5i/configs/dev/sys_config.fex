@@ -260,6 +260,14 @@ rtp_press_threshold = 0x1f40
 rtp_sensitive_level = 0xf
 rtp_exchange_x_y_flag = 0
 
+;--------------------------------------------------------------------------------
+[lis2dh_para]
+lis2dh_used		= 1
+lis2dh_name		= "lis2dh_acc"
+lis2dh_twi_id		= 2
+lis2dh_twi_addr		= 0x19
+lis2dh_int1		= port:PB04<6><default><default><default>
+lis2dh_int2		= port:PG09<6><default><default><default>
 
 ;----------------------------------------------------------------------------------
 ;capacitor tp configuration
@@ -281,7 +289,7 @@ ctp_revert_y_flag        = 1
 ctp_exchange_x_y_flag    = 0
 
 ctp_int_port             = port:PG10<6><default><default><default>
-ctp_wakeup               = port:PG11<1><default><default><1>
+;ctp_wakeup               = port:PG11<1><default><default><1>
 ;ctp_io_port              = port:PH21<0><default>
 
 ;----------------------------------------------------------------------------------
@@ -393,8 +401,8 @@ lcd_gamma_tbl_0          = 0x00000000
 lcd_gamma_tbl_1          = 0x00010101
 lcd_gamma_tbl_255        = 0x00ffffff
 
-;lcd_bl_en_used           = 1
-;lcd_bl_en                = port:power1<1><0><default><1>
+lcd_bl_en_used           = 1
+lcd_bl_en                = port:PG11<1><default><default><1>
 ;lcd_power_used           = 1
 ;lcd_power                = port:power0<1><0><default><1>
 
@@ -882,7 +890,7 @@ ir0_rx                   = port:PB04<2><default><default><default>
 
 
 [rtc_para]
-rtc_used                 = 0
+rtc_used                 = 1
 rtc_name                 = "pcf8563"
 rtc_twi_id               = 1
 rtc_twi_addr	         = 0x51
@@ -893,14 +901,6 @@ light_name              = "bh1721"
 light_twi_id            = 2
 light_twi_addr	        = 0x23
 bh1721_reset       	= port:PF1<1><default><default><0>
-
-[lis2dh_para]
-lis2dh_used		= 1
-lis2dh_name		= "lis2dh_acc"
-lis2dh_twi_id		= 2
-lis2dh_twi_addr		= 0x19
-lis2dh_int1		= port:PB04<6><default><default><default>
-lis2dh_int2		= port:PG09<6><default><default><default>
 
 [humiture_para]
 sht3x_reset              = port:PF3<1><default><default><0>
@@ -945,11 +945,11 @@ pmu_twi_id               = 0
 pmu_irq_id               = 0
 pmu_battery_rdc          = 160
 pmu_battery_cap          = 2000
-pmu_init_chgcur          = 300
+pmu_init_chgcur          = 1500
 pmu_earlysuspend_chgcur  = 600
-pmu_suspend_chgcur       = 1000
-pmu_resume_chgcur        = 300
-pmu_shutdown_chgcur      = 1000
+pmu_suspend_chgcur       = 1500
+pmu_resume_chgcur        = 1500
+pmu_shutdown_chgcur      = 1500
 pmu_init_chgvol          = 4200
 pmu_init_chgend_rate     = 15
 pmu_init_chg_enabled     = 1
@@ -992,7 +992,7 @@ pmu_pwron_vol            = 2900
 pmu_pekoff_time          = 8000
 pmu_pekoff_en            = 1
 pmu_peklong_time         = 1500
-pmu_pekon_time           = 2000
+pmu_pekon_time           = 1000
 pmu_pwrok_time           = 64
 pmu_pwrnoe_time          = 2000
 pmu_intotp_en            = 1
