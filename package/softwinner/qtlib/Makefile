@@ -42,7 +42,7 @@ define Package/qtlib
   SECTION:=utils
   CATEGORY:=softwinner
   TITLE:=qtlib for openwrt
-  DEPENDS:= +libstdc++ +librt
+  DEPENDS:= +libstdc++ +librt +wifimanager
 endef
 
 # Uncomment portion below for Kamikaze and delete DESCRIPTION variable above
