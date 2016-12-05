@@ -711,7 +711,7 @@ luns                     = 3
 ; gs_twi_id ---  TWI ID for controlling Gsensor (0: TWI0, 1: TWI1, 2: TWI2)
 ;--------------------------------------------------------------------------------
 [gsensor_para]
-gsensor_used             = 1
+gsensor_used             = 0
 gsensor_name             = "DA226"
 gsensor_twi_id           = 2
 gsensor_twi_addr         = 0x26
