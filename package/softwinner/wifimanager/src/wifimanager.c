@@ -553,7 +553,7 @@ static int wifi_connect_ap_inner(const char *ssid, tKEY_MGMT key_mgmt, const cha
 	  disconnecting = 0;
 
 	  /* check already exist or connected */
-	  len = 3;
+	  len = NET_ID_LEN+1;
 	  is_exist = wpa_conf_is_ap_exist(ssid, key_mgmt, netid1, &len);
 
     /* add network */
@@ -1213,8 +1213,6 @@ end:
    /* resume scan thread */
     resume_wifi_scan_thread();
 
-	printf("do wifi connect ap with netid finished!\n");
-
 	return ret;
 
 
@@ -1503,6 +1501,29 @@ static int aw_wifi_get_netid(const char *ssid, tKEY_MGMT key_mgmt, char *net_id)
 	}
 }
 
+static int aw_wifi_pause_scan(void)
+{
+	if(gwifi_state == WIFIMG_WIFI_DISABLED){
+		return -1;
+	}
+
+	pause_wifi_scan_thread();
+	return 0;
+
+}
+
+static int aw_wifi_resume_scan(void)
+{
+	if(gwifi_state == WIFIMG_WIFI_DISABLED){
+		return -1;
+	}
+
+	resume_wifi_scan_thread();
+	return 0;
+
+}
+
+
 static const aw_wifi_interface_t aw_wifi_interface = {
     aw_wifi_add_event_callback,
     aw_wifi_is_ap_connected,
@@ -1517,7 +1538,9 @@ static const aw_wifi_interface_t aw_wifi_interface = {
     aw_wifi_remove_network,
     aw_wifi_remove_all_networks,
     aw_wifi_list_networks,
-    aw_wifi_get_netid
+    aw_wifi_get_netid,
+    aw_wifi_pause_scan,
+    aw_wifi_resume_scan
 };
 
 const aw_wifi_interface_t * aw_wifi_on(tWifi_event_callback pcb, int event_label)
