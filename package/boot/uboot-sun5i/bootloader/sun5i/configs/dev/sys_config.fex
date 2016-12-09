@@ -260,14 +260,6 @@ rtp_press_threshold = 0x1f40
 rtp_sensitive_level = 0xf
 rtp_exchange_x_y_flag = 0
 
-;--------------------------------------------------------------------------------
-[lis2dh_para]
-lis2dh_used		= 1
-lis2dh_name		= "lis2dh_acc"
-lis2dh_twi_id		= 2
-lis2dh_twi_addr		= 0x19
-lis2dh_int1		= port:PB04<6><default><default><default>
-lis2dh_int2		= port:PG09<6><default><default><default>
 
 ;----------------------------------------------------------------------------------
 ;capacitor tp configuration
