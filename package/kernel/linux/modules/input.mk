@@ -56,7 +56,7 @@ define KernelPackage/input-evdev
   TITLE:=Input event device
   KCONFIG:=CONFIG_INPUT_EVDEV
   FILES:=$(LINUX_DIR)/drivers/input/evdev.ko
-  AUTOLOAD:=$(call AutoLoad,60,evdev)
+  AUTOLOAD:=$(call AutoLoad,60,evdev,1)
   $(call AddDepends/input)
 endef
 
