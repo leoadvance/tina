@@ -98,10 +98,10 @@ define Package/qtlib/install
 	$(INSTALL_BIN) ./bin/SysSVN $(1)/bin/qtapp/SysSVN
 	$(INSTALL_BIN) ./bin/ts_calibrate $(1)/bin/qtapp/ts_calibrate
 	$(INSTALL_BIN) ./bin/baklight $(1)/bin/qtapp/baklight
-	$(INSTALL_BIN) ./bin/bran.config $(1)/bin/qtapp/bran.config
 	$(INSTALL_BIN) ./bin/BranTip.config $(1)/bin/qtapp/BranTip.config
 	$(INSTALL_BIN) ./bin/startqt.sh $(1)/bin/qtapp/startqt.sh
 	$(INSTALL_BIN) ./bin/esp_fcc.conf $(1)/bin/esp_fcc.conf
+	$(INSTALL_BIN) ./bin/timeZone.json $(1)/bin/qtapp/timeZone.json
 
 
 endef

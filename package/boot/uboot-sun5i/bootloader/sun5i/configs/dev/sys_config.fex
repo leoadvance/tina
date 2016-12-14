@@ -260,6 +260,14 @@ rtp_press_threshold = 0x1f40
 rtp_sensitive_level = 0xf
 rtp_exchange_x_y_flag = 0
 
+;--------------------------------------------------------------------------------
+[lis2dh_para]
+lis2dh_used		= 1
+lis2dh_name		= "lis2dh_acc"
+lis2dh_twi_id		= 2
+lis2dh_twi_addr		= 0x19
+lis2dh_int1		= port:PB04<6><1><default><default>
+lis2dh_int2		= port:PG09<6><1><default><default>
 
 ;----------------------------------------------------------------------------------
 ;capacitor tp configuration
@@ -703,7 +711,7 @@ luns                     = 3
 ; gs_twi_id ---  TWI ID for controlling Gsensor (0: TWI0, 1: TWI1, 2: TWI2)
 ;--------------------------------------------------------------------------------
 [gsensor_para]
-gsensor_used             = 1
+gsensor_used             = 0
 gsensor_name             = "DA226"
 gsensor_twi_id           = 2
 gsensor_twi_addr         = 0x26

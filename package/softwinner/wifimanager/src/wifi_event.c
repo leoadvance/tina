@@ -28,7 +28,7 @@ static int authentication_fail_count = 0;
 static void handle_event(int event, char * remainder) {
     char netid_connected[4] = {0};
     char cmd[255] = {0}, reply[16]={0};
-    int len = 4;
+    int len = NET_ID_LEN+1;
     tWIFI_MACHINE_STATE state;
 
     switch (event){
