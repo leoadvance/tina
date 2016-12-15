@@ -87,7 +87,6 @@ define Package/qtlib/install
 	cp -fpR ./qtlib $(1)/lib/
 	$(INSTALL_DATA) ./etc/ts.conf $(1)/etc/ts.conf
 	$(INSTALL_DATA) ./etc/pointercal $(1)/etc/pointercal
-	$(INSTALL_BIN) ./etc/startqt $(1)/etc/init.d/startqt
 	$(INSTALL_BIN) ./bin/libwilddog.so $(1)/lib/libwilddog.so
 	$(INSTALL_BIN) ./bin/libcurl.so $(1)/lib/libcurl.so
 	$(INSTALL_BIN) ./bin/libcurl.so.4 $(1)/lib/libcurl.so.4
