@@ -88,14 +88,13 @@ define Package/qtlib/install
 	$(INSTALL_DATA) ./etc/ts.conf $(1)/etc/ts.conf
 	$(INSTALL_DATA) ./etc/pointercal $(1)/etc/pointercal
 	$(INSTALL_BIN) ./bin/libwilddog.so $(1)/lib/libwilddog.so
-	$(INSTALL_BIN) ./bin/libcurl.so $(1)/lib/libcurl.so
-	$(INSTALL_BIN) ./bin/libcurl.so.4 $(1)/lib/libcurl.so.4
-	$(INSTALL_BIN) ./bin/libcurl.so.4.4.0 $(1)/lib/libcurl.so.4.4.0
-	$(INSTALL_BIN) ./bin/curl $(1)/bin/curl
 	$(INSTALL_BIN) ./bin/BranQt4 $(1)/bin/qtapp/BranQt4
 	$(INSTALL_BIN) ./bin/Hodor $(1)/bin/qtapp/Hodor
 	$(INSTALL_BIN) ./bin/SysSVN $(1)/bin/qtapp/SysSVN
-	$(INSTALL_BIN) ./bin/ts_calibrate $(1)/bin/qtapp/ts_calibrate
+	$(INSTALL_BIN) ./bin/ts/ts_test $(1)/bin/qtapp/ts/ts_test
+	$(INSTALL_BIN) ./bin/ts/ts_print_raw $(1)/bin/qtapp/ts/ts_print_raw
+	$(INSTALL_BIN) ./bin/ts/ts_print $(1)/bin/qtapp/ts/ts_print
+	$(INSTALL_BIN) ./bin/ts/ts_calibrate $(1)/bin/qtapp/ts/ts_calibrate
 	$(INSTALL_BIN) ./bin/baklight $(1)/bin/qtapp/baklight
 	$(INSTALL_BIN) ./bin/BranTip.config $(1)/bin/qtapp/BranTip.config
 	$(INSTALL_BIN) ./bin/startqt.sh $(1)/bin/qtapp/startqt.sh
