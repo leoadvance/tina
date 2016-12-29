@@ -80,6 +80,7 @@ endef
 define Package/qtlib/install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_DIR) $(1)/bin/qtapp
+	$(INSTALL_DIR) $(1)/bin/qtapp/ts
 	$(INSTALL_DIR) $(1)/lib
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/init.d
@@ -91,6 +92,7 @@ define Package/qtlib/install
 	$(INSTALL_BIN) ./bin/BranQt4 $(1)/bin/qtapp/BranQt4
 	$(INSTALL_BIN) ./bin/Hodor $(1)/bin/qtapp/Hodor
 	$(INSTALL_BIN) ./bin/SysSVN $(1)/bin/qtapp/SysSVN
+	$(INSTALL_BIN) ./bin/IMG_Version $(1)/bin/qtapp/IMG_Version
 	$(INSTALL_BIN) ./bin/ts/ts_test $(1)/bin/qtapp/ts/ts_test
 	$(INSTALL_BIN) ./bin/ts/ts_print_raw $(1)/bin/qtapp/ts/ts_print_raw
 	$(INSTALL_BIN) ./bin/ts/ts_print $(1)/bin/qtapp/ts/ts_print
