@@ -153,7 +153,7 @@ upgrade_pre_mode(){
     umount /usr
     umount /usr
 
-    $UPGRADE_SH clean
+    #$UPGRADE_SH clean
 
     upgrade_start pre
     
@@ -165,13 +165,13 @@ upgrade_pre_mode(){
         $UPGRADE_SH prepare $LOCAL_IMG_PATH $USR_PKG $IS_COMPRESS_IMAGE
         $UPGRADE_SH upgrade
     else
-        check_network $DOMAIN
-        download_prepare_image $RAMDISK_PKG $IS_COMPRESS_IMAGE
+        #check_network $DOMAIN
+        #download_prepare_image $RAMDISK_PKG $IS_COMPRESS_IMAGE
         $UPGRADE_SH upgrade
-        download_prepare_image $TARGET_PKG $IS_COMPRESS_IMAGE
-        $UPGRADE_SH upgrade
-        download_prepare_image $USR_PKG $IS_COMPRESS_IMAGE
-        $UPGRADE_SH upgrade
+        #download_prepare_image $TARGET_PKG $IS_COMPRESS_IMAGE
+        #$UPGRADE_SH upgrade
+        #download_prepare_image $USR_PKG $IS_COMPRESS_IMAGE
+        #$UPGRADE_SH upgrade
     fi
 
     #upgrade_start pre
