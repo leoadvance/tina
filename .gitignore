@@ -23,3 +23,4 @@
 .buildconfig
 TAGS*~
 git-src
+/cp.sh

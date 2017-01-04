@@ -33,9 +33,7 @@ export TSLIB_TSDEVICE=/dev/input/${TP_EVENT}
 
 
 cd /bin/qtapp
-./baklight 128
 
-logread -f >> kernel.log &
 
 export QWS_DISPLAY=Transformed:Rot270
-./BranQt4 -qws -font &
+/bin/qtapp/BranQt4 -qws -font &
