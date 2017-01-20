@@ -103,7 +103,6 @@ define Package/qtlib/install
 	$(INSTALL_BIN) ./bin/OTA.sh $(1)/bin/qtapp/OTA.sh
 	$(INSTALL_BIN) ./bin/gsensor.sh $(1)/bin/qtapp/gsensor.sh
 	$(INSTALL_BIN) ./bin/esp_fcc.conf $(1)/bin/esp_fcc.conf
-	$(INSTALL_BIN) ./bin/timeZone.json $(1)/bin/qtapp/timeZone.json
 
 
 endef
