@@ -101,6 +101,7 @@ define Package/qtlib/install
 	$(INSTALL_BIN) ./bin/BranTip.config $(1)/bin/qtapp/BranTip.config
 	$(INSTALL_BIN) ./bin/startqt.sh $(1)/bin/qtapp/startqt.sh
 	$(INSTALL_BIN) ./bin/OTA.sh $(1)/bin/qtapp/OTA.sh
+	$(INSTALL_BIN) ./bin/OTA_Todo.sh $(1)/bin/qtapp/OTA_Todo.sh
 	$(INSTALL_BIN) ./bin/gsensor.sh $(1)/bin/qtapp/gsensor.sh
 	$(INSTALL_BIN) ./bin/esp_fcc.conf $(1)/bin/esp_fcc.conf
 
