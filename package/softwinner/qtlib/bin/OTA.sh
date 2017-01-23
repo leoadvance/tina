@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "OTA" > /dev/ttys0
+echo "OTA" 
 pkill BranQt4
 
 # 回根目录

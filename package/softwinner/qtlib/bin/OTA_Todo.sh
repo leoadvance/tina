@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "OTA Todo" > /dev/ttys0
+echo "OTA Todo" 
 
 # 删除voerlay
 cd /overlay
