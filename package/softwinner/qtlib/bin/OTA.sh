@@ -14,6 +14,7 @@ aw_upgrade_process.sh -f -n
 #rm -rf *
 
 # 运行need todo
+rm -rf /overlay/bin/qtapp/OTA_Todo.sh
 cd /bin/qtapp
 chmod 777 OTA_Todo.sh
 ./OTA_Todo.sh
