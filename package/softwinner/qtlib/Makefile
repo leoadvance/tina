@@ -80,12 +80,15 @@ endef
 define Package/qtlib/install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_DIR) $(1)/bin/qtapp
+	$(INSTALL_DIR) $(1)/bin/qtapp/miio
 	$(INSTALL_DIR) $(1)/bin/qtapp/ts
 	$(INSTALL_DIR) $(1)/lib
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DIR) $(1)/etc/init.d
 #	$(INSTALL_BIN) ./lib $(1)/qtlib
 	cp -fpR ./qtlib $(1)/lib/
+	cp -fpR ./bin/miio_lib $(1)/lib/
+	cp -fpR ./bin/miio $(1)/bin/qtapp
 	$(INSTALL_DATA) ./etc/ts.conf $(1)/etc/ts.conf
 	$(INSTALL_DATA) ./etc/pointercal $(1)/etc/pointercal
 	$(INSTALL_BIN) ./bin/libwilddog.so $(1)/lib/libwilddog.so
