@@ -36,4 +36,5 @@ cd /bin/qtapp
 
 
 export QWS_DISPLAY=Transformed:Rot270
-/bin/qtapp/BranQt4 -qws -font &
+/bin/qtapp/watchdog.sh &
+

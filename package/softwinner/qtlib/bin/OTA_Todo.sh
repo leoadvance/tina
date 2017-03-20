@@ -2,11 +2,11 @@
 
 echo "OTA Todo" 
 
-
+# 删除overlay脚本
 rm -rf /overlay/bin/qtapp/IMG_Version
 rm -rf /overlay/bin/qtapp/*.sh
 
-# 删除voerlay
+
 cd /overlay
 
 reboot
