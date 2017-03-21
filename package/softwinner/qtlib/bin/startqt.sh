@@ -37,4 +37,6 @@ cd /bin/qtapp
 
 export QWS_DISPLAY=Transformed:Rot270
 /bin/qtapp/watchdog.sh &
+/bin/qtapp/miio/miio_client -D
+/bin/qtapp/miio/miio_client_helper_nomqtt.sh &
 

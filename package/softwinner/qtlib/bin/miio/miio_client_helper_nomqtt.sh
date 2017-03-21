@@ -1,8 +1,8 @@
 #!/bin/sh
 
 WIFI_START_SCRIPT="/the_path_to/wifi_start.sh"
-MIIO_RECV_LINE="/usr/bin/miio_recv_line"
-MIIO_SEND_LINE="/usr/bin//miio_send_line"
+MIIO_RECV_LINE="/bin/qtapp/miio/miio_recv_line"
+MIIO_SEND_LINE="/bin/qtapp/miio/miio_send_line"
 WIFI_MAX_RETRY=5
 WIFI_RETRY_INTERVAL=3
 WIFI_SSID=
@@ -120,11 +120,7 @@ clear_wifi_conf() {
 }
 
 sanity_check() {
-    if [ ! -e $WIFI_START_SCRIPT ]; then
-	echo "Can't find wifi_start.sh: $WIFI_START_SCRIPT"
-	echo 'Please change $WIFI_START_SCRIPT'
-	exit 1
-    fi
+	echo "sanity_check"
 }
 
 main() {

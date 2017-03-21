@@ -93,6 +93,7 @@ define Package/qtlib/install
 	$(INSTALL_DATA) ./etc/ts.conf $(1)/etc/ts.conf
 	$(INSTALL_DATA) ./etc/pointercal $(1)/etc/pointercal
 	$(INSTALL_BIN) ./bin/libwilddog.so $(1)/lib/libwilddog.so
+	$(INSTALL_BIN) ./bin/device.conf $(1)/etc/miio/device.conf
 	$(INSTALL_BIN) ./bin/BranQt4 $(1)/bin/qtapp/BranQt4
 	$(INSTALL_BIN) ./bin/Hodor $(1)/bin/qtapp/Hodor
 	$(INSTALL_BIN) ./bin/SysSVN $(1)/bin/qtapp/SysSVN
