@@ -84,6 +84,7 @@ define Package/qtlib/install
 	$(INSTALL_DIR) $(1)/bin/qtapp/ts
 	$(INSTALL_DIR) $(1)/lib
 	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DIR) $(1)/etc/miio
 	$(INSTALL_DIR) $(1)/etc/init.d
 #	$(INSTALL_BIN) ./lib $(1)/qtlib
 	cp -fpR ./qtlib $(1)/lib/
