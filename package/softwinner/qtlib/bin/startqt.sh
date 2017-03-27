@@ -20,7 +20,7 @@ sed -i '/^export TSLIB_FBDEVICE=/a\export QWS_MOUSE_PROTO=tslib:/dev/input/'$TP_
 mkdir -p /tmp/class/esp_boot
 
 export PATH=/usr/bin:/usr/sbin:/bin:/sbin
-export LD_LIBRARY_PATH=/lib/qtlib
+export LD_LIBRARY_PATH=/lib/qtlib:/lib/miio_lib
 export QT_QWS_FONTDIR=/lib/qtlib/fonts
 export QWS_DISPLAY=Transformed:Rot270
 export TSLIB_CONFFILE=/etc/ts.conf
@@ -36,4 +36,7 @@ cd /bin/qtapp
 
 
 export QWS_DISPLAY=Transformed:Rot270
-/bin/qtapp/BranQt4 -qws -font &
+/bin/qtapp/watchdog.sh &
+/bin/qtapp/miio/miio_client -D
+/bin/qtapp/miio/miio_client_helper_nomqtt.sh &
+

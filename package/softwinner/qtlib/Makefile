@@ -80,15 +80,20 @@ endef
 define Package/qtlib/install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_DIR) $(1)/bin/qtapp
+	$(INSTALL_DIR) $(1)/bin/qtapp/miio
 	$(INSTALL_DIR) $(1)/bin/qtapp/ts
 	$(INSTALL_DIR) $(1)/lib
 	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_DIR) $(1)/etc/miio
 	$(INSTALL_DIR) $(1)/etc/init.d
 #	$(INSTALL_BIN) ./lib $(1)/qtlib
 	cp -fpR ./qtlib $(1)/lib/
+	cp -fpR ./bin/miio_lib $(1)/lib/
+	cp -fpR ./bin/miio $(1)/bin/qtapp
 	$(INSTALL_DATA) ./etc/ts.conf $(1)/etc/ts.conf
 	$(INSTALL_DATA) ./etc/pointercal $(1)/etc/pointercal
 	$(INSTALL_BIN) ./bin/libwilddog.so $(1)/lib/libwilddog.so
+	$(INSTALL_BIN) ./bin/device.conf $(1)/etc/miio/device.conf
 	$(INSTALL_BIN) ./bin/BranQt4 $(1)/bin/qtapp/BranQt4
 	$(INSTALL_BIN) ./bin/Hodor $(1)/bin/qtapp/Hodor
 	$(INSTALL_BIN) ./bin/SysSVN $(1)/bin/qtapp/SysSVN
@@ -101,6 +106,8 @@ define Package/qtlib/install
 	$(INSTALL_BIN) ./bin/BranTip.config $(1)/bin/qtapp/BranTip.config
 	$(INSTALL_BIN) ./bin/startqt.sh $(1)/bin/qtapp/startqt.sh
 	$(INSTALL_BIN) ./bin/OTA.sh $(1)/bin/qtapp/OTA.sh
+	$(INSTALL_BIN) ./bin/OTA_Todo.sh $(1)/bin/qtapp/OTA_Todo.sh
+	$(INSTALL_BIN) ./bin/watchdog.sh $(1)/bin/qtapp/watchdog.sh
 	$(INSTALL_BIN) ./bin/gsensor.sh $(1)/bin/qtapp/gsensor.sh
 	$(INSTALL_BIN) ./bin/esp_fcc.conf $(1)/bin/esp_fcc.conf
 
