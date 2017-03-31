@@ -1,6 +1,0 @@
-/.gitignore
-/boot.img
-/boot_initramfs.img
-/ota.tar.gz
-/rootfs.img
-/usr.img
