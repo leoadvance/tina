@@ -6,6 +6,8 @@ echo "OTA Todo"
 rm -rf /overlay/bin/qtapp/IMG_Version
 rm -rf /overlay/bin/qtapp/*.sh
 
+# 删除原有库
+rm -rf /overlay/lib/qtlib
 
 cd /overlay
 
