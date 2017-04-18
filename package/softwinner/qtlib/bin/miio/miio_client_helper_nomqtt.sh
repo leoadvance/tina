@@ -33,16 +33,17 @@ req_wifi_conf_status() {
 }
 
 request_dinfo() {
-    dinfo_dir=$1
-    dinfo_dir=${dinfo_dir##*params\":\"}
-    dinfo_dir=${dinfo_dir%%\"*}
-    dinfo_file=${dinfo_dir}/device.conf
-
+#    dinfo_dir=$1
+#    dinfo_dir=${dinfo_dir##*params\":\"}
+#    dinfo_dir=${dinfo_dir%%\"*}
+#    dinfo_file=${dinfo_dir}/device.conf
+    dinfo_file="/bin/qtapp/device.conf"	
     dinfo_did=`cat $dinfo_file | grep -v ^# | grep did= | tail -1 | cut -d '=' -f 2`
     dinfo_key=`cat $dinfo_file | grep -v ^# | grep key= | tail -1 | cut -d '=' -f 2`
     dinfo_vendor=`cat $dinfo_file | grep -v ^# | grep vendor= | tail -1 | cut -d '=' -f 2`
     dinfo_mac=`cat $dinfo_file | grep -v ^# | grep mac= | tail -1 | cut -d '=' -f 2`
     dinfo_model=`cat $dinfo_file | grep -v ^# | grep model= | tail -1 | cut -d '=' -f 2`
+
     RESPONSE_DINFO="{\"method\":\"_internal.response_dinfo\",\"params\":{"
     if [ x$dinfo_did != x ]; then
 	RESPONSE_DINFO="$RESPONSE_DINFO\"did\":$dinfo_did"
@@ -131,24 +132,6 @@ main() {
 	    continue
 	fi
 	if contains "$BUF" "_internal.info"; then
-	    STRING=`wpa_cli status`
-
-	    ifname=${STRING#*\'}
-	    ifname=${ifname%%\'*}
-	    echo "ifname: $ifname"
-
-	    if [ "x$WIFI_SSID" != "x" ]; then
-		ssid=$WIFI_SSID
-	    else
-		ssid=${STRING##*ssid=}
-		ssid=`echo ${ssid} | cut -d ' ' -f 1`
-	    fi
-	    echo "ssid: $ssid"
-
-	    bssid=${STRING##*bssid=}
-	    bssid=`echo ${bssid} | cut -d ' ' -f 1 | tr '[:lower:]' '[:upper:]'`
-	    echo "bssid: $bssid"
-
 	    ip=${STRING##*ip_address=}
 	    ip=`echo ${ip} | cut -d ' ' -f 1`
 	    echo "ip: $ip"
@@ -172,7 +155,7 @@ main() {
 	    msg="{\"method\":\"_internal.info\",\"partner_id\":\"\",\"params\":{\
 \"hw_ver\":\"Linux\",\"fw_ver\":\"$sw_version\",\
 \"ap\":{\
- \"ssid\":\"$ssid\",\"bssid\":\"$bssid\"\
+ \"ssid\":\"\",\"bssid\":\"\"\
 },\
 \"netif\":{\
  \"localIp\":\"$ip\",\"mask\":\"$netmask\",\"gw\":\"$gw\"\
