@@ -34,6 +34,8 @@ export TSLIB_TSDEVICE=/dev/input/${TP_EVENT}
 
 cd /bin/qtapp
 
+# 自动加载tvoc
+echo sgpc1x 0x58 > /sys/bus/i2c/devices/i2c-2/new_device
 
 export QWS_DISPLAY=Transformed:Rot270
 /bin/qtapp/watchdog.sh &
