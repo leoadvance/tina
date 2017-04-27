@@ -20,11 +20,11 @@ export PS1='\u@\h:\w\$ '
 # prepare qt run env
 [ -f /lib/qtlib/libstdc++.so.6 ] && rm -rf /lib/qtlib/libstdc++.so.6
 
-export LD_LIBRARY_PATH=/lib/qtlib:/lib/miio_lib
-export QT_QWS_FONTDIR=/lib/qtlib/fonts
+export LD_LIBRARY_PATH=/usr/lib/qtlib:/lib/miio_lib
+export QT_QWS_FONTDIR=/usr/lib/qtlib/fonts
 export QWS_DISPLAY=Transformed:Rot270
 export TSLIB_CONFFILE=/etc/ts.conf
-export TSLIB_PLUGINDIR=/lib/qtlib/ts
+export TSLIB_PLUGINDIR=/usr/lib/qtlib/ts
 export TSLIB_CALIBFILE=/etc/pointercal
 export TSLIB_CONSOLEDEVICE=none
 export TSLIB_FBDEVICE=/dev/fb0
