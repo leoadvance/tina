@@ -33,16 +33,14 @@ req_wifi_conf_status() {
 }
 
 request_dinfo() {
-    dinfo_dir=$1
-    dinfo_dir=${dinfo_dir##*params\":\"}
-    dinfo_dir=${dinfo_dir%%\"*}
-    dinfo_file=${dinfo_dir}/device.conf
-
+    
+    dinfo_file="/bin/qtapp/device.conf"	
     dinfo_did=`cat $dinfo_file | grep -v ^# | grep did= | tail -1 | cut -d '=' -f 2`
     dinfo_key=`cat $dinfo_file | grep -v ^# | grep key= | tail -1 | cut -d '=' -f 2`
     dinfo_vendor=`cat $dinfo_file | grep -v ^# | grep vendor= | tail -1 | cut -d '=' -f 2`
     dinfo_mac=`cat $dinfo_file | grep -v ^# | grep mac= | tail -1 | cut -d '=' -f 2`
     dinfo_model=`cat $dinfo_file | grep -v ^# | grep model= | tail -1 | cut -d '=' -f 2`
+
     RESPONSE_DINFO="{\"method\":\"_internal.response_dinfo\",\"params\":{"
     if [ x$dinfo_did != x ]; then
 	RESPONSE_DINFO="$RESPONSE_DINFO\"did\":$dinfo_did"
@@ -64,17 +62,10 @@ request_dinfo() {
 
 request_dtoken() {
     dtoken_string=$1
-    dtoken_dir=${dtoken_string##*dir\":\"}
-    dtoken_dir=${dtoken_dir%%\"*}
     dtoken_token=${dtoken_string##*ntoken\":\"}
     dtoken_token=${dtoken_token%%\"*}
 
-    dtoken_file=${dtoken_dir}/device.token
-    dcountry_file=${dtoken_dir}/device.country
-
-    if [ ! -e ${dtoken_dir}/wifi.conf ]; then
-	rm -f ${dtoken_file}
-    fi
+    dtoken_file="/bin/qtapp/device.token"
 
     if [ -e ${dtoken_file} ]; then
 	dtoken_token=`cat ${dtoken_file}`
@@ -82,45 +73,21 @@ request_dtoken() {
 	echo ${dtoken_token} > ${dtoken_file}
     fi
     
-    if [ -e ${dcountry_file} ]; then
-	dcountry_country=`cat ${dcountry_file}`
-    else
-    dcountry_country=""
-    fi
-
     RESPONSE_DTOKEN="{\"method\":\"_internal.response_dtoken\",\"params\":\"${dtoken_token}\"}"
-    RESPONSE_DCOUNTRY="{\"method\":\"_internal.response_dcountry\",\"params\":\"${dcountry_country}\"}"
+    RESPONSE_DCOUNTRY="{\"method\":\"_internal.response_dcountry\",\"params\":\"\"}"
 }
 
 save_wifi_conf() {
-    datadir=$1
-    miio_ssid=$2
-    miio_passwd=$3
-    miio_uid=$4
-    miio_country=$5
-    if [ x"$miio_passwd" = x ]; then
-	miio_key_mgmt="NONE"
-    else
-	miio_key_mgmt="WPA"
-    fi
 
-    echo ssid=\"$miio_ssid\" > $datadir/wifi.conf
-    echo psk=\"$miio_passwd\" >> $datadir/wifi.conf
-    echo key_mgmt=$miio_key_mgmt >> $datadir/wifi.conf
-    echo uid=$miio_uid >> $datadir/wifi.conf
-    echo $miio_uid > $datadir/device.uid
-    echo $miio_country > $datadir/device.country
+    echo "save_wifi_conf"
 }
 
 clear_wifi_conf() {
-    datadir=$1
-    rm -f $datadir/wifi.conf
-    rm -f $datadir/device.uid
-    rm -f $datadir/device.country
+    echo "clear_wifi_conf"
 }
 
 sanity_check() {
-	echo "sanity_check"
+    echo "sanity_check"
 }
 
 main() {
@@ -131,24 +98,6 @@ main() {
 	    continue
 	fi
 	if contains "$BUF" "_internal.info"; then
-	    STRING=`wpa_cli status`
-
-	    ifname=${STRING#*\'}
-	    ifname=${ifname%%\'*}
-	    echo "ifname: $ifname"
-
-	    if [ "x$WIFI_SSID" != "x" ]; then
-		ssid=$WIFI_SSID
-	    else
-		ssid=${STRING##*ssid=}
-		ssid=`echo ${ssid} | cut -d ' ' -f 1`
-	    fi
-	    echo "ssid: $ssid"
-
-	    bssid=${STRING##*bssid=}
-	    bssid=`echo ${bssid} | cut -d ' ' -f 1 | tr '[:lower:]' '[:upper:]'`
-	    echo "bssid: $bssid"
-
 	    ip=${STRING##*ip_address=}
 	    ip=`echo ${ip} | cut -d ' ' -f 1`
 	    echo "ip: $ip"
@@ -163,7 +112,7 @@ main() {
 	    echo "gw: $gw"
 
 	    # get vendor and then version
-	    vendor=`grep "vendor" /etc/miio/device.conf | cut -f 2 -d '=' | tr '[:lower:]' '[:upper:]'`
+	    vendor=`grep "vendor" /bin/qtapp/device.conf | cut -f 2 -d '=' | tr '[:lower:]' '[:upper:]'`
 	    sw_version=`grep "${vendor}_VERSION" /etc/os-release | cut -f 2 -d '='`
 	    if [ -z $sw_version ]; then
 		sw_version="unknown"
@@ -172,7 +121,7 @@ main() {
 	    msg="{\"method\":\"_internal.info\",\"partner_id\":\"\",\"params\":{\
 \"hw_ver\":\"Linux\",\"fw_ver\":\"$sw_version\",\
 \"ap\":{\
- \"ssid\":\"$ssid\",\"bssid\":\"$bssid\"\
+ \"ssid\":\"\",\"bssid\":\"\"\
 },\
 \"netif\":{\
  \"localIp\":\"$ip\",\"mask\":\"$netmask\",\"gw\":\"$gw\"\
@@ -186,49 +135,7 @@ main() {
 	    echo $REQ_WIFI_CONF_STATUS_RESPONSE
 	    $MIIO_SEND_LINE "$REQ_WIFI_CONF_STATUS_RESPONSE"
 	elif contains "$BUF" "_internal.wifi_start"; then
-	    wificonf_dir2=${BUF##*\"datadir\":\"}
-	    wificonf_dir2=${wificonf_dir2%%\"*}
-	    miio_ssid=${BUF##*\"ssid\":\"}
-	    miio_ssid=${miio_ssid%%\",\"passwd\":\"*}
-	    miio_passwd=${BUF##*\",\"passwd\":\"}
-	    miio_passwd=${miio_passwd%%\",\"uid\":\"*}
-	    miio_uid=${BUF##*\",\"uid\":\"}
-	    miio_uid=${miio_uid%%\"*}
-	    miio_country=${BUF##*\",\"country_domain\":\"}
-	    miio_country=${miio_country%%\"*}
-
-	    save_wifi_conf "$wificonf_dir2" "$miio_ssid" "$miio_passwd" "$miio_uid" "$miio_country"
-
-	    CMD=$WIFI_START_SCRIPT
-	    RETRY=1
-	    WIFI_SUCC=1
-	    until [ $RETRY -gt $WIFI_MAX_RETRY ]
-	    do
-		WIFI_SUCC=1
-		echo "Retry $RETRY: CMD=${CMD}"
-		${CMD} && break
-		WIFI_SUCC=0
-
-		if [ $WIFI_MAX_RETRY -eq 1 ]; then
-		   break
-		fi
-		let RETRY=$RETRY+1
-		sleep $WIFI_RETRY_INTERVAL
-	    done
-
-	    if [ $WIFI_SUCC -eq 1 ]; then
-		msg="{\"method\":\"_internal.wifi_connected\"}"
-		echo $msg
-		$MIIO_SEND_LINE "$msg"
-	    else
-		clear_wifi_conf $wificonf_dir2
-		CMD=$WIFI_START_SCRIPT
-		echo "Back to AP mode, CMD=${CMD}"
-		${CMD}
-		msg="{\"method\":\"_internal.wifi_ap_mode\",\"params\":null}";
-		echo $msg
-		$MIIO_SEND_LINE "$msg"
-	    fi
+	    echo "Got _internal.wifi_start"
 	elif contains "$BUF" "_internal.request_dinfo"; then
 	    echo "Got _internal.request_dinfo"
 	    request_dinfo "$BUF"
