@@ -7,6 +7,16 @@ WIFI_MAX_RETRY=5
 WIFI_RETRY_INTERVAL=3
 WIFI_SSID=
 
+
+
+GLIBC_TIMEZONE_DIR="/usr/share/zoneinfo"
+UCLIBC_TIMEZONE_DIR="/usr/share/zoneinfo/uclibc"
+
+YOUR_LINK_TIMEZONE_FILE="/mnt/data/TZ"
+YOUR_TIMEZONE_DIR=$UCLIBC_TIMEZONE_DIR
+
+
+
 # contains(string, substring)
 #
 # Returns 0 if the specified string contains the specified substring,
@@ -33,14 +43,13 @@ req_wifi_conf_status() {
 }
 
 request_dinfo() {
-    
-    dinfo_file="/bin/qtapp/device.conf"	
+
+    dinfo_file="/bin/qtapp/device.conf"
     dinfo_did=`cat $dinfo_file | grep -v ^# | grep did= | tail -1 | cut -d '=' -f 2`
     dinfo_key=`cat $dinfo_file | grep -v ^# | grep key= | tail -1 | cut -d '=' -f 2`
     dinfo_vendor=`cat $dinfo_file | grep -v ^# | grep vendor= | tail -1 | cut -d '=' -f 2`
     dinfo_mac=`cat $dinfo_file | grep -v ^# | grep mac= | tail -1 | cut -d '=' -f 2`
     dinfo_model=`cat $dinfo_file | grep -v ^# | grep model= | tail -1 | cut -d '=' -f 2`
-
     RESPONSE_DINFO="{\"method\":\"_internal.response_dinfo\",\"params\":{"
     if [ x$dinfo_did != x ]; then
 	RESPONSE_DINFO="$RESPONSE_DINFO\"did\":$dinfo_did"
@@ -78,12 +87,22 @@ request_dtoken() {
 }
 
 save_wifi_conf() {
-
     echo "save_wifi_conf"
 }
 
 clear_wifi_conf() {
     echo "clear_wifi_conf"
+}
+
+save_tz_conf() {
+	new_tz=$YOUR_TIMEZONE_DIR/$1
+	if [ -f $new_tz ]; then
+		unlink $YOUR_LINK_TIMEZONE_FILE
+		ln -sf  $new_tz $YOUR_LINK_TIMEZONE_FILE
+		echo "timezone set success:$new_tz"
+	else
+		echo "timezone is not exist:$new_tz"
+	fi
 }
 
 sanity_check() {
@@ -98,6 +117,7 @@ main() {
 	    continue
 	fi
 	if contains "$BUF" "_internal.info"; then
+
 	    ip=${STRING##*ip_address=}
 	    ip=`echo ${ip} | cut -d ' ' -f 1`
 	    echo "ip: $ip"
@@ -112,8 +132,9 @@ main() {
 	    echo "gw: $gw"
 
 	    # get vendor and then version
-	    vendor=`grep "vendor" /bin/qtapp/device.conf | cut -f 2 -d '=' | tr '[:lower:]' '[:upper:]'`
+	    vendor=`grep "vendor" /bin/qtapp/device.conf | cut -f 2 -d '=' | tr a-z A-Z`
 	    sw_version=`grep "${vendor}_VERSION" /etc/os-release | cut -f 2 -d '='`
+	    echo $sw_version
 	    if [ -z $sw_version ]; then
 		sw_version="unknown"
 	    fi
@@ -148,6 +169,12 @@ main() {
 	    $MIIO_SEND_LINE "$RESPONSE_DTOKEN"
 		echo $RESPONSE_DCOUNTRY
 	    $MIIO_SEND_LINE "$RESPONSE_DCOUNTRY"
+	elif contains "$BUF" "_internal.config_tz"; then
+	    echo "Got _internal.config_tz"
+	    tz=${BUF##*\",\"tz\":\"}
+	    tz=${tz%%\"*}
+
+	    save_tz_conf "$tz"
 	else
 	    echo "Unknown cmd: $BUF"
 	fi
