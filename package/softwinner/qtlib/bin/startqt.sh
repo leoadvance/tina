@@ -20,11 +20,11 @@ sed -i '/^export TSLIB_FBDEVICE=/a\export QWS_MOUSE_PROTO=tslib:/dev/input/'$TP_
 mkdir -p /tmp/class/esp_boot
 
 export PATH=/usr/bin:/usr/sbin:/bin:/sbin
-export LD_LIBRARY_PATH=/lib/qtlib:/lib/miio_lib:/usr/lib
-export QT_QWS_FONTDIR=/lib/qtlib/fonts
+export LD_LIBRARY_PATH=/usr/lib/qtlib:/lib/miio_lib:/usr/lib
+export QT_QWS_FONTDIR=/usr/lib/qtlib/fonts
 export QWS_DISPLAY=Transformed:Rot270
 export TSLIB_CONFFILE=/etc/ts.conf
-export TSLIB_PLUGINDIR=/lib/qtlib/ts
+export TSLIB_PLUGINDIR=/usr/lib/qtlib/ts
 export TSLIB_CALIBFILE=/etc/pointercal
 export TSLIB_CONSOLEDEVICE=none
 export TSLIB_FBDEVICE=/dev/fb0
