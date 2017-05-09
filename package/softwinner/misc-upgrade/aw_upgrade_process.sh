@@ -115,7 +115,7 @@ boot_recovery_mode(){
     
     get_args
 
-    if [ -f $LOCAL_IMG_PATH/$TARGET_PKG ] && [ -f $IMG_PATH/$USR_PKG; then
+    if [ -f $LOCAL_IMG_PATH/$TARGET_PKG ] && [ -f $LOCAL_IMG_PATH/$USR_PKG ]; then
         $UPGRADE_SH prepare $LOCAL_IMG_PATH $TARGET_PKG $IS_COMPRESS_IMAGE
         $UPGRADE_SH prepare $LOCAL_IMG_PATH $USR_PKG $IS_COMPRESS_IMAGE
         $UPGRADE_SH upgrade
@@ -226,7 +226,7 @@ check_mode(){
     }
     modeflag=1
 }
-while getopts "fpl:nu:d:" opt; do
+while getopts "fpl:nu:d:t:" opt; do
     case $opt in
     f)
         check_mode
@@ -259,6 +259,10 @@ while getopts "fpl:nu:d:" opt; do
         mkdir -p $UPGRADE_SETTING_PATH
         echo $OPTARG > $UPGRADE_SETTING_PATH/.image_domain
         echo "using setting DOMAIN: $OPTARG"
+        ;;
+    t)
+	export TEST_FLAG=$OPTARG # test_pre test_recovery test_post
+        echo "TEST_FLAG: $OPTARG"
         ;;
     \?)
         echo "Invalid option: -$OPTARG"
