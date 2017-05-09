@@ -8,8 +8,8 @@ rm -rf /overlay/bin/qtapp/SysSVN
 rm -rf /overlay/bin/qtapp/BranQt4
 rm -rf /overlay/bin/qtapp/Hodor
 rm -rf /overlay/bin/qtapp/*.sh
-rm -rf /overlay/bin/qtapp/miio/*.sh
-
+rm -rf /overlay/bin/qtapp/miio
+rm -rf /overlay/etc/os-release
 # 删除原有库
 rm -rf /overlay/lib/qtlib
 

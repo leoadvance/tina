@@ -88,13 +88,19 @@ define Package/qtlib/install
 	$(INSTALL_DIR) $(1)/etc/miio
 	$(INSTALL_DIR) $(1)/etc/init.d
 #	$(INSTALL_BIN) ./lib $(1)/qtlib
-	cp -fpR ./qtlib 		$(1)/usr/lib/
-	cp -fpR ./bin/miio_lib 	$(1)/lib/
-	cp -fpR ./bin/miio 		$(1)/bin/qtapp
-	cp -fpR ./bin/ts 		$(1)/bin/qtapp
-	cp -fpR ./bin/lib/* 	$(1)/lib
+
+	cp -fpR ./qtlib $(1)/lib/
+	cp -fpR ./bin/miio_lib $(1)/lib/
+	cp -fpR ./bin/miio $(1)/bin/qtapp
+	cp -fpR ./bin/ts $(1)/bin/qtapp
+	cp -fpR ./bin/lib/* $(1)/lib
 	$(INSTALL_DATA) ./etc/ts.conf 		$(1)/etc/ts.conf
 	$(INSTALL_DATA) ./etc/pointercal 	$(1)/etc/pointercal
+	$(INSTALL_DATA)	./bin/os-release	$(1)/etc/os-release
+#	$(INSTALL_BIN) ./bin/libwilddog.so $(1)/lib/libwilddog.so
+#	$(INSTALL_BIN) ./bin/libqrencode.so $(1)/lib/libqrencode.so
+#	$(INSTALL_BIN) ./bin/libqrencode.so.3 $(1)/lib/libqrencode.so.3
+#	$(INSTALL_BIN) ./bin/libqrencode.so.3.4.3 $(1)/lib/libqrencode.so.3.4.3
 	$(INSTALL_BIN) ./bin/device.conf 	$(1)/bin/qtapp/device.conf
 	$(INSTALL_BIN) ./bin/BranQt4 		$(1)/bin/qtapp/BranQt4
 	$(INSTALL_BIN) ./bin/Hodor 			$(1)/bin/qtapp/Hodor
@@ -106,6 +112,7 @@ define Package/qtlib/install
 	$(INSTALL_BIN) ./bin/OTA.sh 		$(1)/bin/qtapp/OTA.sh
 	$(INSTALL_BIN) ./bin/OTA_Todo.sh 	$(1)/bin/qtapp/OTA_Todo.sh
 	$(INSTALL_BIN) ./bin/watchdog.sh 	$(1)/bin/qtapp/watchdog.sh
+	$(INSTALL_BIN) ./bin/gsensor.sh 	$(1)/bin/qtapp/gsensor.sh
 	$(INSTALL_BIN) ./bin/esp_fcc.conf 	$(1)/bin/esp_fcc.conf
 
 
