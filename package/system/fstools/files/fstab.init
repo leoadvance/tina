@@ -6,6 +6,9 @@ START=40
 start() {                            
 	echo "this file has been obseleted. please call \"/sbin/block mount\" directly"
 	/sbin/block mount
+	echo Start Qt! > /dev/ttyS0
+	. /usr/bin/qtapp/startqt.sh
+	/sbin/kmodloader /etc/modules.d/
 }
 
 stop() {                            
