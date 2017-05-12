@@ -19,6 +19,30 @@ sed -i '/^export TSLIB_FBDEVICE=/a\export QWS_MOUSE_PROTO=tslib:/dev/input/'$TP_
 
 mkdir -p /tmp/class/esp_boot
 
+if read_misc | grep ota
+	then 
+	echo "need do ota"
+	
+	# 删除原有目录etc 并备份
+	rm -rf /mnt/UDISK/etc
+	cp -f /overlay/usr/bin/qtapp/etc /mnt/UDISK/etc
+	
+	# 删除overlay 并还原etc
+	rm -rf  /overlay/usr/bin/qtapp
+	cp -f   /mnt/UDISK/etc /overlay/usr/bin/qtapp/etc
+	
+	# 删除 UDISK目录
+	#rm -rf /mnt/UDISK/
+	echo "Delete overlay"
+
+	# 删除升级标志位
+	/sbin/write_misc -s normal
+	echo "Delete upgrade marks"
+
+	else
+	echo "no need do ota"
+fi
+
 export PATH=/usr/bin:/usr/sbin:/bin:/sbin
 export LD_LIBRARY_PATH=/usr/lib/qtlib:/usr/lib/miio_lib:/usr/lib
 export QT_QWS_FONTDIR=/usr/lib/qtlib/fonts

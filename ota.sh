@@ -7,6 +7,8 @@ if [ $1 == "SystemUpdate" ]
 	# 执行绝对路径升级标志位 
 	/sbin/write_misc -s ota
 
+	reboot
+
 	elif [ $1 == "BranUpdate" ]
   	then
   	echo "Bran Update"

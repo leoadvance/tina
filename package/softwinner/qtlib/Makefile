@@ -103,8 +103,6 @@ define Package/qtlib/install
 	$(INSTALL_BIN) ./bin/baklight 		$(1)/usr/bin/qtapp/baklight
 	$(INSTALL_BIN) ./bin/BranTip.config $(1)/usr/bin/qtapp/BranTip.config
 	$(INSTALL_BIN) ./bin/startqt.sh 	$(1)/usr/bin/qtapp/startqt.sh
-	$(INSTALL_BIN) ./bin/OTA.sh 		$(1)/usr/bin/qtapp/OTA.sh
-	$(INSTALL_BIN) ./bin/OTA_Todo.sh 	$(1)/usr/bin/qtapp/OTA_Todo.sh
 	$(INSTALL_BIN) ./bin/watchdog.sh 	$(1)/usr/bin/qtapp/watchdog.sh
 	$(INSTALL_BIN) ./bin/esp_fcc.conf 	$(1)/usr/bin/esp_fcc.conf
 
