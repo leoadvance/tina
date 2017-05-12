@@ -2,9 +2,9 @@
 now=`date '+%Y-%m-%d %H:%M:%S'`
 
 grepFlag='BranQt4'
-thisLog='/bin/qtapp/watchlog.log'
+thisLog='/usr/bin/qtapp/watchlog.log'
 
-baseDir="/bin/qtapp"
+baseDir="/usr/bin/qtapp"
 sleepTime=5
 if [ ! -f "$baseDir/BranQt4" ];then
 	echo "$baseDir/BranQt4 missing, check agin" > "$thisLog"

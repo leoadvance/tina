@@ -40,7 +40,7 @@ echo sgpc1x 0x58 > /sys/bus/i2c/devices/i2c-2/new_device
 
 export QWS_DISPLAY=Transformed:Rot270
 
-Passed_File=/usr/bin/qtapp/passed.txt
+Passed_File=/usr/bin/qtapp/hodor_passed.txt
 Hodor_File=/usr/bin/qtapp/Hodor
 if [ ! -f $Passed_File ] && [ -f $Hodor_File ]; then
 /usr/bin/qtapp/Hodor -qws &

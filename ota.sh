@@ -5,17 +5,19 @@ if [ $1 == "SystemUpdate" ]
 	echo "need do ota"
 	
 	# 删除原有目录etc 并备份
-	rm -rf /mnt/UDISK/etc
-	cp -f /overlay/usr/bin/qtapp/etc /mnt/UDISK/etc
-	
-	# 删除overlay 并还原etc
-	rm -rf  /overlay/usr/bin/qtapp
-	cp -f   /mnt/UDISK/etc /overlay/usr/bin/qtapp/etc
-	
-	# 删除 UDISK目录
-	#rm -rf /mnt/UDISK/
-	echo "Delete overlay"
-
+	for file in /overlay/usr/bin/qtapp/*
+	do  
+	if [ -d "$file" ]  
+	then   
+	if [ $file != "/overlay/usr/bin/qtapp/etc" ]
+	then
+  	rm -rf $file
+	fi
+	elif [ -f "$file" ] 
+	then  
+  	rm $file
+	fi 
+	done
 	# 升级命令
 	aw_upgrade_process.sh -f -l /mnt/UDISK
 
