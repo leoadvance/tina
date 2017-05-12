@@ -1,8 +1,8 @@
 #!/bin/sh
 
 WIFI_START_SCRIPT="/the_path_to/wifi_start.sh"
-MIIO_RECV_LINE="/bin/qtapp/miio/miio_recv_line"
-MIIO_SEND_LINE="/bin/qtapp/miio/miio_send_line"
+MIIO_RECV_LINE="/usr/bin/qtapp/miio/miio_recv_line"
+MIIO_SEND_LINE="/usr/bin/qtapp/miio/miio_send_line"
 WIFI_MAX_RETRY=5
 WIFI_RETRY_INTERVAL=3
 WIFI_SSID=
@@ -44,7 +44,7 @@ req_wifi_conf_status() {
 
 request_dinfo() {
 
-    dinfo_file="/bin/qtapp/device.conf"
+    dinfo_file="/usr/bin/qtapp/device.conf"
     dinfo_did=`cat $dinfo_file | grep -v ^# | grep did= | tail -1 | cut -d '=' -f 2`
     dinfo_key=`cat $dinfo_file | grep -v ^# | grep key= | tail -1 | cut -d '=' -f 2`
     dinfo_vendor=`cat $dinfo_file | grep -v ^# | grep vendor= | tail -1 | cut -d '=' -f 2`
@@ -74,7 +74,7 @@ request_dtoken() {
     dtoken_token=${dtoken_string##*ntoken\":\"}
     dtoken_token=${dtoken_token%%\"*}
 
-    dtoken_file="/bin/qtapp/device.token"
+    dtoken_file="/usr/bin/qtapp/device.token"
 
     if [ -e ${dtoken_file} ]; then
 	dtoken_token=`cat ${dtoken_file}`
@@ -132,7 +132,7 @@ main() {
 	    echo "gw: $gw"
 
 	    # get vendor and then version
-	    vendor=`grep "vendor" /bin/qtapp/device.conf | cut -f 2 -d '=' | tr a-z A-Z`
+	    vendor=`grep "vendor" /usr/bin/qtapp/device.conf | cut -f 2 -d '=' | tr a-z A-Z`
 	    sw_version=`grep "${vendor}_VERSION" /etc/os-release | cut -f 2 -d '='`
 	    echo $sw_version
 	    if [ -z $sw_version ]; then
