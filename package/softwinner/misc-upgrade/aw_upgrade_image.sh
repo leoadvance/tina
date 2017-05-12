@@ -170,6 +170,13 @@ do_write_partition(){
         }
     }
 }
+test_hook(){
+        #reboot -f #test hook
+	if [ x$TEST_FLAG = x$1 ]; then 
+		reboot -f
+	fi
+}
+
 do_upgrade_image(){
     echo do_upgrade_image ......
 
@@ -185,7 +192,10 @@ do_upgrade_image(){
         #         do again
         
         do_write_partition $UPGRADE_IMG_DIR/$RAMDISK_IMG "extend"
-        #reboot -f #test
+
+        #reboot -f #test hook
+	test_hook "test_pre"
+
         set_system_flag "boot-recovery"
         #fail #1 end
         rm -rf $UPGRADE_IMG_DIR/$RAMDISK_IMG
@@ -198,8 +208,9 @@ do_upgrade_image(){
         #            upgrade process -> 
         #            get target image -> 
         #            do again
-        #reboot -f #test
-        do_write_partition $UPGRADE_IMG_DIR/$BOOT_IMG "boot"
+	test_hook "test_recovery"
+        
+	do_write_partition $UPGRADE_IMG_DIR/$BOOT_IMG "boot"
         do_write_partition $UPGRADE_IMG_DIR/$ROOTFS_IMG "rootfs"
         
         #clear extroot-uuid flag
@@ -221,7 +232,10 @@ do_upgrade_image(){
         #            upgrade process -> 
         #            get usr image -> 
         #            upgrade $USR_IMG
-        do_write_partition $UPGRADE_IMG_DIR/$USR_IMG "extend"
+        
+	test_hook "test_post"
+
+	do_write_partition $UPGRADE_IMG_DIR/$USR_IMG "extend"
         
         set_system_flag "upgrade_end"
 

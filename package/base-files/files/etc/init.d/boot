@@ -74,7 +74,4 @@ boot() {
 		done
 	}
 
-	echo Start Qt! > /dev/ttyS0
-	. /bin/qtapp/startqt.sh
-	/sbin/kmodloader /etc/modules.d/
 }
