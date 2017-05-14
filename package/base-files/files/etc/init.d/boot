@@ -74,5 +74,4 @@ boot() {
 		done
 	}
 
-	/sbin/kmodloader /etc/modules.d/
 }
